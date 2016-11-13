@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <!-- 主背景 -->
+    <color name="bg_blue">#06A9E2</color>
+ 
+    <!-- 分割线 -->
+    <color name="bg_divide">#E9E9E9</color>
+    
+    <!-- 分割线背景 -->
+    <color name="bg_divide2">#F2F2F2</color>
+    
+    <!-- 分割线背景 -->
+    <color name="bg_gray">#F2F2F2</color>
+
+    <color name="tab_main_text_normal">#828282</color>
+    <color name="tab_main_text_pressed">#3d81fc</color>
+    <color name="tab_top_text_1">#828282</color>
+    <color name="tab_top_text_2">#3d81fc</color>
+    <color name="tab_top2_text_1">#000</color>
+    <color name="tab_top2_text_2">#fff</color>
+    <color name="tab_top_scrollbar">@color/tab_main_text_pressed</color>
+    <color name="white">#fff</color>
+
+    <!-- 主背景 -->
+    <color name="main_background_day">#ffffff</color>
+    <color name="main_background_night">#2B2B2B</color>
+
+    <!-- 底部Tab背景 -->
+    <color name="tab_main_background_day">#ffffff</color>
+    <color name="tab_main_background_night">#212121</color>
+
+    <!-- 文章列表文字颜色 -->
+    <color name="news_main_day">#000000</color>
+    <color name="news_main_night">#C2C2C2</color>
+    <color name="news_list_other_day">#B1B1B1</color>
+    <color name="news_list_other_night">#AAAAAA</color>
+
+    <color name="black">#000000</color><!--纯黑-->
+    <color name="light_black">#2B2B2B</color><!--亮黑-->
+    <color name="shallow_black">#212121</color><!--浅黑-->
+    <!--<color name="grey_white">#C2C2C2</color>&lt;!&ndash;灰白&ndash;&gt;-->
+    <color name="dark_gray">#AAAAAA</color><!--深灰-->
+    <color name="bright_gray">#AEAEAE</color><!--亮灰-->
+    <color name="silver_gray">#8A8A8A</color><!--银灰-->
+    <color name="light_white">#454545</color>
+</resources>

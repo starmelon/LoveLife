@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18dp"
+        android:textColor="#9E9E9E"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="6dp"
+        android:textStyle="bold"
+        android:text="作者 : starmelon"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16dp"
+        android:textColor="#9E9E9E"
+        android:layout_centerInParent="true"
+        android:text="邮箱 : starmelon@foxmail.com"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16dp"
+        android:textColor="#9E9E9E"
+        android:layout_centerInParent="true"
+        android:linksClickable="true"
+        android:autoLink="web"
+        android:text="GitHub : github.com/starmelon"/>
+
+
+</LinearLayout>

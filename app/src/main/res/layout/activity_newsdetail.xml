@@ -1,0 +1,99 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <ScrollView 
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        
+        <RelativeLayout 
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="15dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp">
+
+
+
+            <TextView 
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="标题"
+                android:textStyle="bold"
+                android:textSize="19sp"
+                android:textColor="?attr/news_list_item_title"/>
+            
+            <TextView 
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_title"
+                android:layout_alignParentLeft="true"
+                android:layout_marginTop="3dp"
+                android:textSize="12sp"
+                android:textColor="?attr/news_other"
+                android:text="0000-0-00 00:00:00"/>
+            
+            <TextView 
+                android:id="@+id/tv_provenance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_title"
+                android:layout_toRightOf="@id/tv_time"
+                android:layout_alignTop="@id/tv_time"
+                android:layout_marginLeft="10dp"
+                android:textSize="12sp"
+                android:textColor="?attr/news_other"
+                android:text="出处"/>
+            
+            <TextView
+                android:id="@+id/tv_count"
+                android:layout_width="wrap_content" 
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_title"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@id/tv_time"
+                android:textSize="12sp"
+                android:textColor="?attr/news_other"
+                android:text="0"/>
+            
+            <View 
+                android:layout_below="@id/tv_time"
+                android:id="@+id/divide"
+                android:layout_height="1dp"
+                android:layout_width="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:background="?attr/lst_divide"/>
+
+            <ImageView
+                android:id="@+id/img_news"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="fitXY"
+                android:layout_marginBottom="10dp"
+                android:layout_below="@id/divide"/>
+
+            <TextView
+                android:id="@+id/tv_content"
+                android:layout_below="@id/img_news"
+                android:layout_width="match_parent" 
+                android:layout_height="match_parent"
+                android:lineSpacingMultiplier="1.2"
+                android:gravity="center_vertical"
+                android:textColor="?attr/news_content"
+                android:textSize="16sp"
+                />
+            
+        </RelativeLayout>
+        
+    </ScrollView>
+
+    <include layout="@layout/activity_newsdetail_bottom" />
+
+</LinearLayout>
