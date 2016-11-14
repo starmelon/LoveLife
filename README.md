@@ -40,7 +40,18 @@
    * 所有图片素材均为本人设计或后期再加工，包括icon，Banner等
    
 ## 应用截图
+   * 主页
+   
+   ![](https://github.com/starmelon/lovelife/blob/master/PreView/main.jpg)
+   
+   * 详情页
+   
+   ![](https://github.com/starmelon/lovelife/blob/master/PreView/detail.jpg)
 
+   * 夜间模式 （预览该图时请等待加载完成）
+   
+   ![](https://github.com/starmelon/lovelife/blob/master/PreView/SwichNightMode.gif)
+   
 ## 体验下载
 
 ## 关于我
