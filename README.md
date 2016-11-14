@@ -54,6 +54,8 @@
    
 ## 体验下载
 
+   * [点我下载](https://github.com/starmelon/lovelife/blob/master/PreView/Demo.apk)
+
 ## 关于我
-   * Mail : starmelon@foxmail.com
+   * 邮箱 : starmelon@foxmail.com
 
