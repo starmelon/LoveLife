@@ -161,6 +161,12 @@ public class NewsViewPagerFragment extends LazyFragment {
     }
 
     @Override
+    protected void onPauseLazy() {
+        super.onPauseLazy();
+        bannerComponent.stopAutoPlay();
+    }
+
+    @Override
     protected void onDestroyViewLazy() {
         super.onDestroyViewLazy();
         handler.removeMessages(1);

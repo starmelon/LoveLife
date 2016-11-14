@@ -31,7 +31,7 @@
         android:layout_centerInParent="true"
         android:linksClickable="true"
         android:autoLink="web"
-        android:text="GitHub : github.com/starmelon"/>
+        android:text="GitHub : github.com/starmelon/lovelife"/>
 
 
 </LinearLayout>

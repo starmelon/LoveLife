@@ -20,6 +20,7 @@
         <item name="tab_bottom_text_pressed" >@color/purple_blue</item>
         <item name="news_main">@color/black</item>
         <item name="textColor">@color/dark_gray</item>
+        <item name="login_background">@color/light_white</item>
     </style>
 
 
