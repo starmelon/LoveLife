@@ -51,6 +51,10 @@
    
    ![](https://github.com/starmelon/lovelife/blob/master/PreView/detail.jpg)
 
+   * 收藏夹 （预览该图时请等待加载完成）
+
+   ![](https://github.com/starmelon/lovelife/blob/master/PreView/collection.gif)
+
    * 夜间模式 （预览该图时请等待加载完成）
    
    ![](https://github.com/starmelon/lovelife/blob/master/PreView/SwichNightMode.gif)
