@@ -33,6 +33,7 @@
 #### 控件使用
    * [Togglebutton](https://github.com/zcweng/ToggleButton)
    * [Roundedimageview](https://github.com/vinc3m1/RoundedImageView)
+   * [recyclerview-swipe](https://github.com/yanzhenjie/SwipeRecyclerView)
 
 #### SDK使用
    * [ShareSDK](https://github.com/square/okhttp)
