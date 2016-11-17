@@ -11,6 +11,7 @@
         android:background="?attr/login_background"
         >
 
+        <!-- 用户头像 -->
         <com.makeramen.roundedimageview.RoundedImageView
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/btn_login"
@@ -26,7 +27,9 @@
             app:riv_tile_mode="clamp"
             app:riv_oval="true" />
 
+        <!-- 用户昵称/登录提示 -->
         <TextView
+            android:id="@+id/tv_nickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/btn_login"

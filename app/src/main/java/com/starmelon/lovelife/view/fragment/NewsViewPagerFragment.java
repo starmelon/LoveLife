@@ -1,16 +1,21 @@
 package com.starmelon.lovelife.view.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -126,8 +131,22 @@ public class NewsViewPagerFragment extends LazyFragment {
                 intent.putExtras(bundle);
                 //intent.putExtra("id", hotNews.getId());
                 //intent.putExtra("news",hotNews.s);
-                startActivity(intent);
 
+                View img =  view.findViewById(R.id.img_news);
+                View title = view.findViewById(R.id.tv_title);
+                View time =  view.findViewById(R.id.tv_time);
+
+                Pair<View, String> imgPair = Pair.create(img, getString(R.string.news_pic));
+                Pair<View, String> titlePair = Pair.create(title, getString(R.string.news_title));
+                Pair<View, String> timePair = Pair.create(time, getString(R.string.news_time));
+
+                ActivityOptionsCompat compat =
+                        ActivityOptionsCompat.makeSceneTransitionAnimation(
+                                getActivity(), imgPair, titlePair, timePair );
+
+                ActivityCompat.startActivity(getContext(),intent, compat.toBundle());
+
+                //Pair<View, String> imagePair = Pair.create(vie, getString(R.string.image));
             }
 
             @Override
@@ -147,6 +166,8 @@ public class NewsViewPagerFragment extends LazyFragment {
 
 
     }
+
+
 
     @Override
     protected void onResumeLazy() {

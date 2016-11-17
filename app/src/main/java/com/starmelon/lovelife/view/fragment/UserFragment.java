@@ -4,22 +4,20 @@ import android.app.UiModeManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 
 import com.makeramen.roundedimageview.RoundedImageView;
+import com.squareup.picasso.Picasso;
 import com.starmelon.lovelife.MyApplication;
 import com.starmelon.lovelife.R;
 import com.starmelon.lovelife.util.SPutils;
@@ -35,6 +33,8 @@ public class UserFragment extends Fragment
 {
 	
 	private RoundedImageView mBtn_login;
+	private TextView mTv_nickname;
+
 	private ToggleButton mTogglebtn_daynight;
 
 	private RelativeLayout mRl_about;
@@ -48,6 +48,7 @@ public class UserFragment extends Fragment
 		if (view == null){
 			view = inflater.inflate(R.layout.fragment_user,container,false);
 			initView();
+			setUserInfo();
 		}
 
 		return view;
@@ -61,26 +62,15 @@ public class UserFragment extends Fragment
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(getContext(), LoginActivity.class);
-				startActivity(intent);
+				startActivityForResult(intent,1);
+				//startActivity(intent);
 			}
 		});
+
+		mTv_nickname = (TextView) view.findViewById(R.id.tv_nickname);
+
 		mTogglebtn_daynight = (ToggleButton) view.findViewById(R.id.togglebtn_daynight);
 
-
-//		//切换
-//		mTogglebtn_daynight.toggle();
-//
-//		//切换无动画
-//		mTogglebtn_daynight.toggle(false);
-
-//		mTogglebtn_daynight.setToggleOn();
-//		mTogglebtn_daynight.setToggleOff();
-//		//无动画切换
-//		mTogglebtn_daynight.setToggleOn(false);
-//		mTogglebtn_daynight.setToggleOff(false);
-//
-//		//禁用动画
-//		mTogglebtn_daynight.setAnimate(false);
 
 		if (MyApplication.bitmap != null){
 
@@ -164,30 +154,32 @@ public class UserFragment extends Fragment
 	}
 
 
-	private void showAboutPopWin(){
-//		// 一个自定义的布局，作为显示的内容
-//		View contentView = LayoutInflater.from(getActivity()).inflate(
-//				R.layout.popwin_about,null);
-//
-//		final PopupWindow popupWindow = new PopupWindow(contentView,
-//				WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT,true);
-//
-//
-//		popupWindow.setTouchable(true);
-//
-//		ColorDrawable dw = new ColorDrawable(0xb0000000);
-//		popupWindow.setBackgroundDrawable(dw);
-//
-//		// 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
-//		// 我觉得这里是API的一个bug
-////		popupWindow.setBackgroundDrawable();
-////		popupWindow.setBackgroundDrawable(Color.TRANSPARENT);
-//
-//		// 设置好参数之后再show
-//		popupWindow.showAtLocation(view,Gravity.CENTER,0,0 );
 
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+		if (resultCode == 1){
+			setUserInfo();
+		}
 
 	}
 
 
+	private void setUserInfo(){
+		if (MyApplication.getUser() == null){
+			return;
+		}
+
+		if (TextUtils.isEmpty(MyApplication.getUser().getHeadPic()) ){
+			return;
+		}
+
+		Picasso.with(MyApplication.getContext()).load(MyApplication.getUser().getHeadPic()).into(mBtn_login);
+
+		if (TextUtils.isEmpty(MyApplication.getUser().getNickname()) ){
+			return;
+		}
+		mTv_nickname.setText(MyApplication.getUser().getNickname());
+
+	}
 }

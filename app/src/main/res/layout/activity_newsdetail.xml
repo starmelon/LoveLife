@@ -26,7 +26,8 @@
                 android:text="标题"
                 android:textStyle="bold"
                 android:textSize="19sp"
-                android:textColor="?attr/news_list_item_title"/>
+                android:textColor="?attr/news_list_item_title"
+                android:transitionName="@string/news_title"/>
             
             <TextView 
                 android:id="@+id/tv_time"
@@ -37,7 +38,8 @@
                 android:layout_marginTop="3dp"
                 android:textSize="12sp"
                 android:textColor="?attr/news_other"
-                android:text="0000-0-00 00:00:00"/>
+                android:text="0000-0-00 00:00:00"
+                android:transitionName="@string/news_time"/>
             
             <TextView 
                 android:id="@+id/tv_provenance"
@@ -77,7 +79,8 @@
                 android:layout_height="wrap_content"
                 android:scaleType="fitXY"
                 android:layout_marginBottom="10dp"
-                android:layout_below="@id/divide"/>
+                android:layout_below="@id/divide"
+                android:transitionName="@string/news_pic"/>
 
             <TextView
                 android:id="@+id/tv_content"

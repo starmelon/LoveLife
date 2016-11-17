@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Outline;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -35,7 +36,7 @@ import cn.sharesdk.onekeyshare.OnekeyShare;
 
 import okhttp3.Call;
 
-public class NewsDetailActivity extends Activity {
+public class NewsDetailActivity extends AppCompatActivity {
 
 	private LinearLayout ll_tab;
 	private ImageView mImg;
@@ -78,11 +79,23 @@ public class NewsDetailActivity extends Activity {
 		mTv_provenance.setText(mHotNews.getFromname());
 		mTv_count.setText(mHotNews.getCount() + "");
 
-		getData(mHotNews.getId());
+
+
+
 
 		//判断是否已收藏过
 		Collection collection = new CollectionDaoLHelper().getCollecionByID(mHotNews.getId());
 		isCollected = collection == null ? false : true;
+
+		if (mHotNews.getImg().equals(API.API_IMAGE + "/top/default.jpg")){
+			mImg.setVisibility(View.GONE);
+			//Picasso.with(MyApplication.getContext()).load(R.drawable.img_default).into(mImg);
+		}else
+		{
+			Picasso.with(MyApplication.getContext()).load(mHotNews.getImg()).into(mImg);
+		}
+
+		getData(mHotNews.getId());
 	}
 
 	private void iniView() {
@@ -169,13 +182,13 @@ public class NewsDetailActivity extends Activity {
 
 				mNewsDetail = response;
 
-				if (mNewsDetail.img.equals("/top/default.jpg")){
-					mImg.setVisibility(View.GONE);
-					//Picasso.with(MyApplication.getContext()).load(R.drawable.img_default).into(mImg);
-				}else
-				{
-					Picasso.with(MyApplication.getContext()).load(API.API_IMAGE+ mNewsDetail.img).into(mImg);
-				}
+//				if (mNewsDetail.img.equals("/top/default.jpg")){
+//					mImg.setVisibility(View.GONE);
+//					//Picasso.with(MyApplication.getContext()).load(R.drawable.img_default).into(mImg);
+//				}else
+//				{
+//					Picasso.with(MyApplication.getContext()).load(API.API_IMAGE+ mNewsDetail.img).into(mImg);
+//				}
 				//Picasso.with(MyApplication.getContext()).load(mNewsDetail..getImg()).into(mImg);
 				String content = Html.fromHtml(mNewsDetail.message).toString();
 				mTv_content.setText(content.replace((char)65532,' '));

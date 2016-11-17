@@ -54,7 +54,7 @@
     -->
     
     <ShareSDK 
-        AppKey = "androidv1101"/> <!-- 修改成你在sharesdk后台注册的应用的appkey"-->
+        AppKey = "fd7724e13a4a"/> <!-- 修改成你在sharesdk后台注册的应用的appkey"-->
     
     <!-- ShareByAppClient标识是否使用微博客户端分享，默认是false -->
     <SinaWeibo
@@ -77,8 +77,8 @@
     <QZone
         Id="3"
         SortId="3"
-        AppId="100371282"
-        AppKey="aed9b0303e3ed1e27bae87c33761161d"
+		AppId="1105136995"
+		AppKey="gJbMghsc6T2Bsvcl"
         Enable="true" />
     
     <!-- 
@@ -120,8 +120,8 @@
 	<QQ
         Id="7"
         SortId="7"
-        AppId="100371282"
-        AppKey="aed9b0303e3ed1e27bae87c33761161d"
+        AppId="1105136995"
+        AppKey="gJbMghsc6T2Bsvcl"
         ShareByAppClient="true"
         Enable="true" />
     

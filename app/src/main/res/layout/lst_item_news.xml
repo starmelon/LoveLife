@@ -19,7 +19,8 @@
         android:layout_width="80dp"
         android:layout_alignParentLeft="true"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_launcher" />
+        android:src="@drawable/ic_launcher"
+        android:transitionName="@string/news_pic"/>
 
     <TextView
         android:id="@+id/tv_title"
@@ -31,7 +32,8 @@
         android:textSize="14sp"
         android:layout_alignTop="@id/img_news"
         android:layout_alignBottom="@id/img_news"
-        android:layout_toRightOf="@id/img_news"/>
+        android:layout_toRightOf="@id/img_news"
+        android:transitionName="@string/news_title"/>
     
     <TextView
         android:id="@+id/tv_time"
@@ -42,7 +44,8 @@
         android:layout_marginLeft="5dp"
         android:textSize="12sp"
         android:layout_alignBottom="@id/img_news"
-        android:layout_toRightOf="@id/img_news"/>
+        android:layout_toRightOf="@id/img_news"
+        android:transitionName="@string/news_time"/>
     
     <TextView
         android:id="@+id/tv_count"

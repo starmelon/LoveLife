@@ -1,5 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -103,14 +104,29 @@
             android:gravity="center"
             android:text="微信登录"
             android:textColor="#828282"/>
-        
-        <ImageButton 
+
+        <com.makeramen.roundedimageview.RoundedImageView
             android:id="@+id/btn_qq_login"
-            android:layout_height="70dp"
+            android:src="@drawable/qq"
+            android:scaleType="centerCrop"
             android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/btn_weibo_login"
-            android:background="@drawable/btn_normal" />
+            app:riv_corner_radius="30dip"
+            app:riv_border_width="2dip"
+            app:riv_border_color="#ffffff"
+            app:riv_mutate_background="true"
+            app:riv_tile_mode="clamp"
+            app:riv_oval="true" />
+
+        <!--<ImageButton -->
+            <!--android:id="@+id/btn_qq_login"-->
+            <!--android:layout_height="70dp"-->
+            <!--android:layout_width="70dp"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_toRightOf="@id/btn_weibo_login"-->
+            <!--android:background="@drawable/btn_normal" />-->
         
         <TextView 
             android:layout_width="match_parent"

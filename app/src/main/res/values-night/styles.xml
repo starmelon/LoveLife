@@ -6,6 +6,7 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowContentTransitions">true</item><!--开启转场动画-->
 
         <item name="main_background">@color/light_black</item>
         <item name="tab_top_background">@color/shallow_black</item>
