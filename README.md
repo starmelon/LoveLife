@@ -8,6 +8,7 @@
  * 新闻展示（包括上拉加载，下拉刷新）
  * 新闻类别切换（Tab切换）
  * 新闻详细内容展示
+ * 本地收藏夹功能（包括侧滑删除）
  * 社交化内容分享
  * 夜间模式
    
@@ -27,7 +28,8 @@
    * [Picasso](https://github.com/square/picasso)
    * [OkHttp](https://github.com/square/okhttp)
    * [Gson](https://github.com/google/gson)
-   
+   * [GreenDao](https://github.com/greenrobot/greenDAO)
+
 #### 控件使用
    * [Togglebutton](https://github.com/zcweng/ToggleButton)
    * [Roundedimageview](https://github.com/vinc3m1/RoundedImageView)
