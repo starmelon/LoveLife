@@ -1,4 +1,20 @@
 apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.greenrobot:greendao-gradle-plugin:3.2.0'
+    }
+}
+
+greendao {
+    schemaVersion 1
+    daoPackage 'com.starmelon.lovelife.db.local.gen'
+    targetGenDir 'src/main/java'
+}
 
 android {
     compileSdkVersion 25
@@ -73,5 +89,10 @@ dependencies {
     //Json解析
     compile 'com.google.code.gson:gson:2.3.1'
 
+    //侧滑RecycleView
+    compile 'com.yanzhenjie:recyclerview-swipe:1.0.2'
 
+    //Dao框架
+    compile 'org.greenrobot:greendao:3.2.0'
+    compile 'org.greenrobot:greendao-generator:3.2.0'
 }

@@ -6,7 +6,6 @@ import android.graphics.Outline;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.Html;
-import android.text.Spanned;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewOutlineProvider;
@@ -17,19 +16,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.starmelon.lovelife.MyApplication;
 import com.starmelon.lovelife.R;
 import com.starmelon.lovelife.bean.NewsDetail;
+import com.starmelon.lovelife.bean.enties.Collection;
 import com.starmelon.lovelife.bean.enties.HotNews;
+import com.starmelon.lovelife.db.local.CollectionDaoLHelper;
 import com.starmelon.lovelife.db.net.API;
 import com.starmelon.lovelife.db.net.ApiManager;
 import com.starmelon.lovelife.db.net.GenericsCallback;
 import com.starmelon.lovelife.db.net.JsonGenericsSerializator;
 
-
-import java.sql.Timestamp;
 
 import cn.sharesdk.framework.ShareSDK;
 
@@ -46,10 +44,13 @@ public class NewsDetailActivity extends Activity {
 	private TextView mTv_provenance;
 	private TextView mTv_count;
 	private TextView mTv_content;
-	
+
+	private ImageButton mBtn_collect;
 	private ImageButton mBtn_share;
-	
-	NewsDetail news;
+
+	private boolean isCollected;
+	private HotNews mHotNews;
+	NewsDetail mNewsDetail;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -69,15 +70,19 @@ public class NewsDetailActivity extends Activity {
 	private void initData() {
 
 		Intent intent = getIntent();
-		HotNews hotNews = (HotNews) intent.getSerializableExtra("hotNews");
+		mHotNews = (HotNews) intent.getSerializableExtra("hotNews");
 
 
-		mTv_title.setText(hotNews.getTitle());
-		mTv_time.setText(hotNews.getTime());
-		mTv_provenance.setText(hotNews.getFromname());
-		mTv_count.setText(hotNews.getCount() + "");
+		mTv_title.setText(mHotNews.getTitle());
+		mTv_time.setText(mHotNews.getTime());
+		mTv_provenance.setText(mHotNews.getFromname());
+		mTv_count.setText(mHotNews.getCount() + "");
 
-		getData(hotNews.getId());
+		getData(mHotNews.getId());
+
+		//判断是否已收藏过
+		Collection collection = new CollectionDaoLHelper().getCollecionByID(mHotNews.getId());
+		isCollected = collection == null ? false : true;
 	}
 
 	private void iniView() {
@@ -87,6 +92,31 @@ public class NewsDetailActivity extends Activity {
 		mTv_count = (TextView) findViewById(R.id.tv_count);
 		mImg = (ImageView) findViewById(R.id.img_news);
 		mTv_content = (TextView) findViewById(R.id.tv_content);
+
+
+
+		mBtn_collect = (ImageButton) findViewById(R.id.btn_collect);
+		mBtn_collect.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				if (mNewsDetail != null){
+					CollectionDaoLHelper cdl = new CollectionDaoLHelper();
+
+					if (isCollected){
+						Toast.makeText(NewsDetailActivity.this,"已收藏过",Toast.LENGTH_SHORT).show();
+					}else {
+						new CollectionDaoLHelper().addCollection(mHotNews.getId(),mHotNews.getTitle());
+						isCollected = true;
+						Toast.makeText(NewsDetailActivity.this,"收藏成功",Toast.LENGTH_SHORT).show();
+
+					}
+
+
+				}
+
+			}
+		});
+
 
 		mBtn_share = (ImageButton) findViewById(R.id.btn_share);
 		mBtn_share.setOnClickListener(new OnClickListener() {
@@ -137,57 +167,23 @@ public class NewsDetailActivity extends Activity {
 					return;
 				}
 
-				news = response;
+				mNewsDetail = response;
 
-				//mTv_title.setText(news.title);
-				//mTv_time.setText(new Timestamp(news.time).toString());
-				//mTv_provenance.setText(news.fromname);
-				//mTv_count.setText(news.fcount+"");
-				if (news.img.equals("/top/default.jpg")){
+				if (mNewsDetail.img.equals("/top/default.jpg")){
 					mImg.setVisibility(View.GONE);
 					//Picasso.with(MyApplication.getContext()).load(R.drawable.img_default).into(mImg);
 				}else
 				{
-					Picasso.with(MyApplication.getContext()).load(API.API_IMAGE+news.img).into(mImg);
+					Picasso.with(MyApplication.getContext()).load(API.API_IMAGE+ mNewsDetail.img).into(mImg);
 				}
-				//Picasso.with(MyApplication.getContext()).load(news..getImg()).into(mImg);
-				String content = Html.fromHtml(news.message).toString();
+				//Picasso.with(MyApplication.getContext()).load(mNewsDetail..getImg()).into(mImg);
+				String content = Html.fromHtml(mNewsDetail.message).toString();
 				mTv_content.setText(content.replace((char)65532,' '));
 
 			}
 		},id);
 
-//		ApiManager.getNewsDetailById(new RequestHandler<NewsDetail>() {
-//
-//			@Override
-//			public void onRequestFinish(NewsDetail data) {
-//				if (data == null) {
-//					Toast.makeText(getApplicationContext(), "获取数据失败", Toast.LENGTH_SHORT).show();
-//					return;
-//				}
-//
-//				news = data;
-//
-//				mTv_title.setText(news.title);
-//				mTv_time.setText(new Timestamp(news.time).toString());
-//				mTv_provenance.setText(news.fromname);
-//				mTv_fcount.setText(news.fcount+"");
-//				mTv_content.setText(Html.fromHtml(news.message));
-//				//mTv_content.setText(data.message);
-//			}
-//
-//			@Override
-//			public NewsDetail processOriginData(JsonData jsonData) {
-//				Gson gson = new Gson();
-//				return gson.fromJson(jsonData.toString(),NewsDetail.class);
-//			}
-//
-//			@Override
-//			public void onRequestFail(FailData failData) {
-//				// TODO Auto-generated method stub
-//
-//			}
-//		}, id);
+
 		
 	}
 
@@ -204,7 +200,7 @@ public class NewsDetailActivity extends Activity {
 		// title标题，印象笔记、邮箱、信息、微信、人人网和QQ空间使用
 		oks.setTitle(getString(R.string.share));
 		// titleUrl是标题的网络链接，仅在人人网和QQ空间使用
-		oks.setTitleUrl(news.fromurl);
+		oks.setTitleUrl(mNewsDetail.fromurl);
 		// text是分享文本，所有平台都需要这个字段
 		oks.setText("我是分享文本");
 		// imagePath是图片的本地路径，Linked-In以外的平台都支持此参数

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import com.starmelon.lovelife.db.local.GreenDaoManager;
 import com.starmelon.lovelife.util.SPutils;
 import com.starmelon.lovelife.util.volley.RequestManager;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -85,6 +86,7 @@ public class MyApplication extends Application {
 				.build();
 		OkHttpUtils.initClient(okHttpClient);
 
+		//读取夜间模式
 		if ((Boolean) SPutils.get(getContext(),"NigthMode",false) == false){
 			UiModeManager mUiModeManager = (UiModeManager) getContext().getSystemService(Context.UI_MODE_SERVICE);
 			mUiModeManager.setNightMode(UiModeManager.MODE_NIGHT_NO);
@@ -93,10 +95,9 @@ public class MyApplication extends Application {
 			mUiModeManager.setNightMode(UiModeManager.MODE_NIGHT_YES);
 		}
 
-//		UiModeManager mUiModeManager = (UiModeManager) getContext().getSystemService(Context.UI_MODE_SERVICE);
-//		mUiModeManager.setNightMode(UiModeManager.MODE_NIGHT_NO);
+		//初始化数据库
+		GreenDaoManager.getInstance();
 
-		//AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 	}
 
 	public static Context getContext(){

@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
 		// 禁止viewpager的滑动事件
 		viewPager.setCanScroll(false);
 		// 设置viewpager保留界面不重新加载的页面数量
-		viewPager.setOffscreenPageLimit(3);
+		viewPager.setOffscreenPageLimit(2);
 
 
 		//ShareSDK.initSDK(this);
