@@ -11,6 +11,9 @@
  * 本地收藏夹功能（包括侧滑删除）
  * 社交化内容分享
  * 夜间模式
+ * 2016.11.22
+ * 增加登录退出功能
+ * 实现留言大厅
    
 因项目完成时间较短，且碍于时间与精力，可能会有适配、未知BUG等未得到解决的问题存在，希望在该文档完善和代码整理之后，你能Fork一个分支，共同完善该项目。
    
@@ -37,6 +40,7 @@
 
 #### SDK使用
    * [ShareSDK](https://github.com/square/okhttp)
+   * [easemobSDK](http://www.easemob.com/download/im)
 
 ## 素材使用
    * 部分原素材取自 [Thenounproject](https://thenounproject.com/)
