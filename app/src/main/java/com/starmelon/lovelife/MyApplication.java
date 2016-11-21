@@ -121,6 +121,7 @@ public class MyApplication extends Application {
 	public static User getUser(){return user;}
 
 
+
 	//region 环信初始化相关
 
 	// 记录是否已经初始化

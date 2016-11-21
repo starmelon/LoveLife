@@ -27,7 +27,7 @@ import com.starmelon.lovelife.MyApplication;
 import com.starmelon.lovelife.R;
 import com.starmelon.lovelife.adapter.MainActivityTabPagerAdapter;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
 	private IndicatorViewPager indicatorViewPager;
 	private FixedIndicatorView indicator;
@@ -48,27 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 		//切换夜间模式
-		if (MyApplication.bitmap != null) {
-
-			cover = new ImageView(this);
-			cover.setImageBitmap(MyApplication.bitmap);
-			oa = ObjectAnimator.ofFloat(cover, "alpha", 1f, 0f);
-			oa.setDuration(600);
-			if (mWindowManager == null) {
-				Log.v("win", "WindowManager 被创建了");
-				mWindowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-			}
-
-			try {
-
-				mWindowManager.addView(cover, MyApplication.mNightViewParam);
-			} catch (Exception e) {
-				this.finish();
-				//e.printStackTrace();
-			}
-			oa.start();
-		}
-
+		SwitchNightMode();
 
 
 		SViewPager viewPager = (SViewPager) findViewById(R.id.tabmain_viewPager);
@@ -102,6 +82,34 @@ public class MainActivity extends AppCompatActivity {
 
 		//ShareSDK.initSDK(this);
 
+	}
+
+
+	/**
+	 * 切换夜间模式
+	 */
+	private void SwitchNightMode() {
+
+		if (MyApplication.bitmap != null) {
+
+			cover = new ImageView(this);
+			cover.setImageBitmap(MyApplication.bitmap);
+			oa = ObjectAnimator.ofFloat(cover, "alpha", 1f, 0f);
+			oa.setDuration(600);
+			if (mWindowManager == null) {
+				Log.v("win", "WindowManager 被创建了");
+				mWindowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+			}
+
+			try {
+
+				mWindowManager.addView(cover, MyApplication.mNightViewParam);
+			} catch (Exception e) {
+				this.finish();
+				//e.printStackTrace();
+			}
+			oa.start();
+		}
 	}
 
 	private class OnTransitionTextListener extends com.shizhefei.view.indicator.transition.OnTransitionTextListener{

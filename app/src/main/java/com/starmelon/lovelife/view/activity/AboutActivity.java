@@ -10,7 +10,7 @@ import com.starmelon.lovelife.R;
  * Created by starmelon on 2016/11/13 0013.
  */
 
-public class AboutActivity extends AppCompatActivity {
+public class AboutActivity extends BaseActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

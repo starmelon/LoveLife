@@ -137,12 +137,12 @@ public class NewsViewPagerFragment extends LazyFragment {
                 View time =  view.findViewById(R.id.tv_time);
 
                 Pair<View, String> imgPair = Pair.create(img, getString(R.string.news_pic));
-                Pair<View, String> titlePair = Pair.create(title, getString(R.string.news_title));
+                //Pair<View, String> titlePair = Pair.create(title, getString(R.string.news_title));
                 Pair<View, String> timePair = Pair.create(time, getString(R.string.news_time));
 
                 ActivityOptionsCompat compat =
                         ActivityOptionsCompat.makeSceneTransitionAnimation(
-                                getActivity(), imgPair, titlePair, timePair );
+                                getActivity(), imgPair, timePair );
 
                 ActivityCompat.startActivity(getContext(),intent, compat.toBundle());
 

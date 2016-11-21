@@ -6,7 +6,11 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowContentOverlay">@null</item><!-- 去除启动黑屏 -->
+
         <item name="android:windowContentTransitions">true</item><!--开启转场动画-->
+
+        <item name="android:windowEnterTransition">@transition/explode</item>
+        <item name="android:windowExitTransition">@transition/explode</item>
 
         <item name="main_background">@color/white</item>
         <item name="tab_top_background">@color/gray_white</item>

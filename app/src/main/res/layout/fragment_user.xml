@@ -124,40 +124,44 @@
         android:layout_height="8dp"
         android:background="?attr/lst_divide" />
 
-    <!--<View-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="1dp"-->
-        <!--android:background="@color/bg_divide" />-->
+    <RelativeLayout
+        android:id="@+id/rl_messagebook"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/fragment_user_lst_height"
+        android:padding="10dp">
 
-    <!--<RelativeLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="@dimen/fragment_user_lst_height"-->
-        <!--android:paddingBottom="4dp"-->
-        <!--android:paddingLeft="@dimen/setting_item_padding_left"-->
-        <!--android:paddingRight="10dp"-->
-        <!--android:paddingTop="4dp" >-->
+        <ImageView
+            android:id="@+id/img_messagebook"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/about" />
 
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentLeft="true"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:text="分享与交流" />-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/img_messagebook"
+            android:layout_marginLeft="10dp"
+            android:text="留言大厅" />
 
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:text=">"-->
-            <!--android:textSize="20sp" />-->
-    <!--</RelativeLayout>-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text=">"
+            android:scaleY="1.5"
+            android:textSize="20sp" />
+    </RelativeLayout>
+
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="8dp"
         android:background="?attr/lst_divide" />
 
+    <!-- 关于菜单 -->
     <RelativeLayout
         android:id="@+id/rl_about"
         android:layout_width="match_parent"

@@ -1,9 +1,9 @@
 package com.starmelon.lovelife.view.activity;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
+import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -11,7 +11,6 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.hyphenate.EMCallBack;
@@ -30,20 +29,25 @@ import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.tencent.qq.QQ;
 
-public class LoginActivity extends Activity {
+import static android.R.attr.activityCloseEnterAnimation;
+import static android.R.attr.activityCloseExitAnimation;
+
+public class LoginActivity extends BaseActivity {
 
 	private EditText mEdt_id;
 	private EditText mEdt_password;
 	private Button mBtn_login;
-	private ImageButton mBtn_weibo_login;
-	private ImageButton mBtn_wechat_login;
+	private RoundedImageView mBtn_weibo_login;
+	private RoundedImageView mBtn_wechat_login;
 	private RoundedImageView mBtn_qq_login;
-	
+
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
+
+
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_login);
 		
@@ -69,8 +73,8 @@ public class LoginActivity extends Activity {
 		mEdt_id = (EditText) findViewById(R.id.edt_id);
 		mEdt_password = (EditText) findViewById(R.id.edt_password);
 		mBtn_login = (Button) findViewById(R.id.btn_login);
-		mBtn_weibo_login = (ImageButton) findViewById(R.id.btn_weibo_login);
-		mBtn_wechat_login = (ImageButton) findViewById(R.id.btn_wechat_login);
+		mBtn_weibo_login = (RoundedImageView) findViewById(R.id.btn_weibo_login);
+		mBtn_wechat_login = (RoundedImageView) findViewById(R.id.btn_wechat_login);
 		mBtn_qq_login = (RoundedImageView) findViewById(R.id.btn_qq_login);
 		mBtn_qq_login.setOnClickListener(new OnClickListener() {
 			
@@ -85,51 +89,87 @@ public class LoginActivity extends Activity {
 	}
 	
 	private void LoginByQQ() {
+
+		final ProgressDialog mDialog = new ProgressDialog(this);
+		mDialog.setMessage("跳转至授权登录页面中");
+		mDialog.show();
+
 		Platform qq = ShareSDK.getPlatform(QQ.NAME);
 
+		if (qq.isAuthValid()){
+			qq.removeAccount(true);
+		}
 		qq.SSOSetting(false);
 		qq.setPlatformActionListener(new PlatformActionListener() {
 			
 			@Override
 			public void onError(Platform arg0, int arg1, Throwable arg2) {
 				// TODO Auto-generated method stub
-				
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						Toast.makeText(getApplication(),"授权失败",Toast.LENGTH_SHORT).show();
+					}
+				});
 			}
 			
 			@Override
-			public void onComplete(Platform arg0, int arg1, HashMap<String, Object> arg2) {
-				// TODO Auto-generated method stub
-				
+			public void onComplete(final Platform qq, int arg1, HashMap<String, Object> arg2) {
+
+				mDialog.dismiss();
+
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+
+						//Toast.makeText(getApplication(),"授权成功",Toast.LENGTH_SHORT).show();
+
+						String accessToken = qq.getDb().getToken(); // 获取授权token
+						String openId = qq.getDb().getUserId(); // 获取用户在此平台的ID
+						String nickname = qq.getDb().getUserName();
+						String headurl = qq.getDb().getUserIcon();
+
+						if(TextUtils.isEmpty(openId)){
+							Toast.makeText(getApplication(),"获取授权失败",Toast.LENGTH_SHORT).show();
+							return;
+						}
+
+						//默认获取的为40*40的小头像
+						if(!TextUtils.isEmpty(headurl) && !headurl.endsWith("/240")){
+							headurl = headurl.substring(0,headurl.length()-3) + "/240";
+						}
+
+						Log.v("getdb", qq.getDb().getUserId());
+						Log.v("getdb", qq.getDb().getUserName());
+						Log.v("getdb", qq.getDb().getUserIcon());
+						Log.v("getdb", qq.getDb().exportData());
+						//mEdt_id.setText(openId);
+
+						User user = new User(nickname,openId,headurl);
+
+						signIn2easemob(user);
+
+
+
+					}
+				});
+
+
 			}
 			
 			@Override
 			public void onCancel(Platform arg0, int arg1) {
 				// TODO Auto-generated method stub
-				
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						Toast.makeText(getApplication(),"授权取消",Toast.LENGTH_SHORT).show();
+					}
+				});
 			}
 		});
 		qq.showUser(null);
 		//qq.authorize();
-		
-	
-		String accessToken = qq.getDb().getToken(); // 获取授权token
-		String openId = qq.getDb().getUserId(); // 获取用户在此平台的ID
-		String nickname = qq.getDb().getUserName();
-		String headurl = qq.getDb().getUserIcon();
-		//默认获取的为40*40的小头像
-		if(!headurl.endsWith("/240")){
-			headurl = headurl.substring(0,headurl.length()-3) + "/240";
-		}
-
-		Log.v("getdb", qq.getDb().getUserId());
-		Log.v("getdb", qq.getDb().getUserName());
-		Log.v("getdb", qq.getDb().getUserIcon());
-		Log.v("getdb", qq.getDb().exportData());
-		mEdt_id.setText(openId);
-
-		User user = new User(nickname,openId,headurl);
-
-		signIn2easemob(user);
 
 	}
 
@@ -242,7 +282,7 @@ public class LoginActivity extends Activity {
 						// 登录成功跳转界面
 //						Intent intent = new Intent(LoginActivity.this, MainActivity.class);
 //						startActivity(intent);
-						setResult(1);
+						//setResult(1);
 						MyApplication.setUser(user);
 						finish();
 
@@ -320,8 +360,5 @@ public class LoginActivity extends Activity {
 		});
 	}
 
-	
-	
-	
-	
+
 }

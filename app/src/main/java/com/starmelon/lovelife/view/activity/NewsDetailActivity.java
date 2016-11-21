@@ -36,7 +36,7 @@ import cn.sharesdk.onekeyshare.OnekeyShare;
 
 import okhttp3.Call;
 
-public class NewsDetailActivity extends AppCompatActivity {
+public class NewsDetailActivity extends BaseActivity {
 
 	private LinearLayout ll_tab;
 	private ImageView mImg;
