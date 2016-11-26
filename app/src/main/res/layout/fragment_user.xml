@@ -46,7 +46,7 @@
         android:padding="10dp">
 
         <ImageView
-            android:id="@+id/img_comment"
+            android:id="@+id/img_nightmode"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:scaleType="centerInside"
@@ -58,24 +58,54 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/img_comment"
+            android:layout_toRightOf="@id/img_nightmode"
             android:text="夜间模式"
             />
 
-        <com.zcw.togglebutton.ToggleButton
-            xmlns:toggle="http://schemas.android.com/apk/res-auto"
+        <!--<com.kyleduo.switchbutton.SwitchButton-->
+            <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+            <!--android:id="@+id/togglebtn_daynight"-->
+            <!--android:layout_width="50dp"-->
+            <!--android:layout_height="24dp"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--app:kswAnimationDuration="300"-->
+            <!--app:kswBackDrawable="@drawable/ios_back_drawable"-->
+            <!--app:kswBackMeasureRatio="1.4"-->
+            <!--app:kswThumbDrawable="@drawable/ios_thumb_selector"-->
+            <!--app:kswThumbMarginBottom="-8dp"-->
+            <!--app:kswThumbMarginLeft="-5dp"-->
+            <!--app:kswThumbMarginRight="-5dp"-->
+            <!--app:kswThumbMarginTop="-2.5dp"/>-->
+
+        <!--<ToggleButton-->
+            <!--android:id="@+id/togglebtn_daynight"-->
+            <!--android:layout_width="50dp"-->
+            <!--android:layout_height="24dp"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_centerVertical="true" />-->
+
+        <com.starmelon.switchbutton.SwitchView
             android:id="@+id/togglebtn_daynight"
             android:layout_width="50dp"
             android:layout_height="24dp"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            toggle:tbOnColor="#3D81FC"
-            toggle:tbOffColor="#ddd"
-            toggle:tbSpotColor="#FFFFFF"
-            toggle:tbOffBorderColor="@null"
-            toggle:tbBorderWidth="2dp"
-            android:textOff="白天">
-        </com.zcw.togglebutton.ToggleButton>
+            android:layout_centerVertical="true"/>
+
+        <!--<com.zcw.togglebutton.ToggleButton-->
+            <!--xmlns:toggle="http://schemas.android.com/apk/res-auto"-->
+            <!--android:id="@+id/togglebtn_daynight"-->
+            <!--android:layout_width="50dp"-->
+            <!--android:layout_height="24dp"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--toggle:tbOnColor="#3D81FC"-->
+            <!--toggle:tbOffColor="#ddd"-->
+            <!--toggle:tbSpotColor="#FFFFFF"-->
+            <!--toggle:tbOffBorderColor="@null"-->
+            <!--toggle:tbBorderWidth="2dp"-->
+            <!--android:textOff="白天">-->
+        <!--</com.zcw.togglebutton.ToggleButton>-->
 
     </RelativeLayout>
 

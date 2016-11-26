@@ -1,9 +1,7 @@
 package com.starmelon.lovelife.view.activity;
 
 import android.app.ProgressDialog;
-import android.content.res.TypedArray;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -11,16 +9,20 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hyphenate.EMCallBack;
 import com.hyphenate.EMError;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.exceptions.HyphenateException;
 import com.makeramen.roundedimageview.RoundedImageView;
-import com.starmelon.lovelife.MyApplication;
 import com.starmelon.lovelife.R;
-import com.starmelon.lovelife.bean.User;
+import com.starmelon.lovelife.data.User;
+import com.starmelon.lovelife.presenter.BasePresenter;
+import com.starmelon.lovelife.presenter.SignInContract;
+import com.starmelon.lovelife.presenter.SignInPresenter;
+import com.starmelon.lovelife.util.ToastUtils;
 
 import java.util.HashMap;
 
@@ -29,18 +31,20 @@ import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.tencent.qq.QQ;
 
-import static android.R.attr.activityCloseEnterAnimation;
-import static android.R.attr.activityCloseExitAnimation;
+public class LoginActivity extends BaseActivity implements SignInContract.View{
 
-public class LoginActivity extends BaseActivity {
 
-	private EditText mEdt_id;
-	private EditText mEdt_password;
-	private Button mBtn_login;
+
+	private TextView mTv_desc;
+
+	private RelativeLayout mRl_signin;
 	private RoundedImageView mBtn_weibo_login;
 	private RoundedImageView mBtn_wechat_login;
 	private RoundedImageView mBtn_qq_login;
 
+	private Button mBtn_signup;
+
+	private SignInContract.Presenter mPresenter;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +56,10 @@ public class LoginActivity extends BaseActivity {
 		setContentView(R.layout.activity_login);
 		
 		iniView();
+
+		//MVP
+		this.mPresenter = new SignInPresenter(this);
+
 		//initEvent();
 		
 //		Intent intent = getIntent();
@@ -69,10 +77,16 @@ public class LoginActivity extends BaseActivity {
 		
 	}
 
+	@Override
+	protected BasePresenter createPresenter() {
+		return null;
+	}
+
 	private void iniView() {
-		mEdt_id = (EditText) findViewById(R.id.edt_id);
-		mEdt_password = (EditText) findViewById(R.id.edt_password);
-		mBtn_login = (Button) findViewById(R.id.btn_login);
+
+		mTv_desc = (TextView) findViewById(R.id.tv_desc);
+
+		mRl_signin = (RelativeLayout) findViewById(R.id.rl_login);
 		mBtn_weibo_login = (RoundedImageView) findViewById(R.id.btn_weibo_login);
 		mBtn_wechat_login = (RoundedImageView) findViewById(R.id.btn_wechat_login);
 		mBtn_qq_login = (RoundedImageView) findViewById(R.id.btn_qq_login);
@@ -80,14 +94,29 @@ public class LoginActivity extends BaseActivity {
 			
 			@Override
 			public void onClick(View v) {
-				LoginByQQ();
+				mPresenter.signIn(QQ.NAME);
+				//LoginByQQ();
 			}
 
 			
 		});
-		
+
+		mBtn_signup = (Button) findViewById(R.id.btn_signup);
+		mBtn_signup.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				mPresenter.signOut();
+			}
+		});
+
 	}
-	
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		mPresenter.showSignStatus();
+	}
+
 	private void LoginByQQ() {
 
 		final ProgressDialog mDialog = new ProgressDialog(this);
@@ -147,7 +176,7 @@ public class LoginActivity extends BaseActivity {
 
 						User user = new User(nickname,openId,headurl);
 
-						signIn2easemob(user);
+						//signIn2easemob(user);
 
 
 
@@ -197,7 +226,7 @@ public class LoginActivity extends BaseActivity {
 								mDialog.dismiss();
 							}
 							Toast.makeText(LoginActivity.this, "注册成功", Toast.LENGTH_LONG).show();
-							signIn2easemob(user);
+							//signIn2easemob(user);
 
 						}
 					});
@@ -250,115 +279,152 @@ public class LoginActivity extends BaseActivity {
 	}
 
 
-	/**
-	 * 登录方法
-	 */
-	private void signIn2easemob(final User user) {
+//	/**
+//	 * 登录方法
+//	 */
+//	private void signIn2easemob(final User user) {
+//
+//		final ProgressDialog mDialog = new ProgressDialog(this);
+//		mDialog.setMessage("正在登陆，请稍后...");
+//		mDialog.show();
+//
+//		if (TextUtils.isEmpty(user.getPwb()) || TextUtils.isEmpty(user.getPwb())) {
+//			Toast.makeText(LoginActivity.this, "登录信息获取失败", Toast.LENGTH_LONG).show();
+//			return;
+//		}
+//		EMClient.getInstance().login(user.getPwb(), user.getPwb(), new EMCallBack() {
+//			/**
+//			 * 登陆成功的回调
+//			 */
+//			@Override
+//			public void onSuccess() {
+//				runOnUiThread(new Runnable() {
+//					@Override
+//					public void run() {
+//						mDialog.dismiss();
+//
+//						// 加载所有会话到内存
+//						EMClient.getInstance().chatManager().loadAllConversations();
+//						// 加载所有群组到内存，如果使用了群组的话
+//						// EMClient.getInstance().groupManager().loadAllGroups();
+//
+//						// 登录成功跳转界面
+////						Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+////						startActivity(intent);
+//						//setResult(1);
+//						MyApplication.setUser(user);
+//						finish();
+//
+//					}
+//				});
+//			}
+//
+//			/**
+//			 * 登陆错误的回调
+//			 * @param i
+//			 * @param s
+//			 */
+//			@Override
+//			public void onError(final int i, final String s) {
+//				runOnUiThread(new Runnable() {
+//					@Override
+//					public void run() {
+//						mDialog.dismiss();
+//						Log.d("lzan13", "登录失败 Error code:" + i + ", message:" + s);
+//						/**
+//						 * 关于错误码可以参考官方api详细说明
+//						 * http://www.easemob.com/apidoc/android/chat3.0/classcom_1_1hyphenate_1_1_e_m_error.html
+//						 */
+//						switch (i) {
+//							// 网络异常 2
+//							case EMError.NETWORK_ERROR:
+//								Toast.makeText(LoginActivity.this, "网络错误 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
+//								break;
+//							// 无效的用户名 101
+//							case EMError.INVALID_USER_NAME:
+//								Toast.makeText(LoginActivity.this, "无效的用户名 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
+//								break;
+//							// 无效的密码 102
+//							case EMError.INVALID_PASSWORD:
+//								Toast.makeText(LoginActivity.this, "无效的密码 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
+//								break;
+//							// 用户认证失败，用户名或密码错误 202
+//							case EMError.USER_AUTHENTICATION_FAILED:
+//								Toast.makeText(LoginActivity.this, "用户认证失败，用户名或密码错误 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
+//								break;
+//							// 用户不存在 204
+//							case EMError.USER_NOT_FOUND:
+//								signUp2easemob(user);
+//								//Toast.makeText(LoginActivity.this, "用户不存在 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
+//								break;
+//							// 无法访问到服务器 300
+//							case EMError.SERVER_NOT_REACHABLE:
+//								Toast.makeText(LoginActivity.this, "无法访问到服务器 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
+//								break;
+//							// 等待服务器响应超时 301
+//							case EMError.SERVER_TIMEOUT:
+//								Toast.makeText(LoginActivity.this, "等待服务器响应超时 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
+//								break;
+//							// 服务器繁忙 302
+//							case EMError.SERVER_BUSY:
+//								Toast.makeText(LoginActivity.this, "服务器繁忙 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
+//								break;
+//							// 未知 Server 异常 303 一般断网会出现这个错误
+//							case EMError.SERVER_UNKNOWN_ERROR:
+//								Toast.makeText(LoginActivity.this, "未知的服务器异常 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
+//								break;
+//							default:
+//								Toast.makeText(LoginActivity.this, "ml_sign_in_failed code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
+//								break;
+//						}
+//					}
+//				});
+//			}
+//
+//
+//			@Override
+//			public void onProgress(int i, String s) {
+//
+//			}
+//		});
+//	}
 
-		final ProgressDialog mDialog = new ProgressDialog(this);
-		mDialog.setMessage("正在登陆，请稍后...");
-		mDialog.show();
 
-		if (TextUtils.isEmpty(user.getPwb()) || TextUtils.isEmpty(user.getPwb())) {
-			Toast.makeText(LoginActivity.this, "登录信息获取失败", Toast.LENGTH_LONG).show();
-			return;
-		}
-		EMClient.getInstance().login(user.getPwb(), user.getPwb(), new EMCallBack() {
-			/**
-			 * 登陆成功的回调
-			 */
-			@Override
-			public void onSuccess() {
-				runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						mDialog.dismiss();
+	@Override
+	public void showSignIn() {
+		mRl_signin.setVisibility(View.VISIBLE);
+		mBtn_signup.setVisibility(View.GONE);
+		mTv_desc.setVisibility(View.VISIBLE);
 
-						// 加载所有会话到内存
-						EMClient.getInstance().chatManager().loadAllConversations();
-						// 加载所有群组到内存，如果使用了群组的话
-						// EMClient.getInstance().groupManager().loadAllGroups();
+	}
 
-						// 登录成功跳转界面
-//						Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//						startActivity(intent);
-						//setResult(1);
-						MyApplication.setUser(user);
-						finish();
+	@Override
+	public void showSingOut() {
+		mRl_signin.setVisibility(View.GONE);
+		mBtn_signup.setVisibility(View.VISIBLE);
+		mTv_desc.setVisibility(View.GONE);
+	}
 
-					}
-				});
-			}
+	@Override
+	public void signInSuccess() {
 
-			/**
-			 * 登陆错误的回调
-			 * @param i
-			 * @param s
-			 */
-			@Override
-			public void onError(final int i, final String s) {
-				runOnUiThread(new Runnable() {
-					@Override
-					public void run() {
-						mDialog.dismiss();
-						Log.d("lzan13", "登录失败 Error code:" + i + ", message:" + s);
-						/**
-						 * 关于错误码可以参考官方api详细说明
-						 * http://www.easemob.com/apidoc/android/chat3.0/classcom_1_1hyphenate_1_1_e_m_error.html
-						 */
-						switch (i) {
-							// 网络异常 2
-							case EMError.NETWORK_ERROR:
-								Toast.makeText(LoginActivity.this, "网络错误 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
-								break;
-							// 无效的用户名 101
-							case EMError.INVALID_USER_NAME:
-								Toast.makeText(LoginActivity.this, "无效的用户名 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
-								break;
-							// 无效的密码 102
-							case EMError.INVALID_PASSWORD:
-								Toast.makeText(LoginActivity.this, "无效的密码 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
-								break;
-							// 用户认证失败，用户名或密码错误 202
-							case EMError.USER_AUTHENTICATION_FAILED:
-								Toast.makeText(LoginActivity.this, "用户认证失败，用户名或密码错误 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
-								break;
-							// 用户不存在 204
-							case EMError.USER_NOT_FOUND:
-								signUp2easemob(user);
-								//Toast.makeText(LoginActivity.this, "用户不存在 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
-								break;
-							// 无法访问到服务器 300
-							case EMError.SERVER_NOT_REACHABLE:
-								Toast.makeText(LoginActivity.this, "无法访问到服务器 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
-								break;
-							// 等待服务器响应超时 301
-							case EMError.SERVER_TIMEOUT:
-								Toast.makeText(LoginActivity.this, "等待服务器响应超时 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
-								break;
-							// 服务器繁忙 302
-							case EMError.SERVER_BUSY:
-								Toast.makeText(LoginActivity.this, "服务器繁忙 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
-								break;
-							// 未知 Server 异常 303 一般断网会出现这个错误
-							case EMError.SERVER_UNKNOWN_ERROR:
-								Toast.makeText(LoginActivity.this, "未知的服务器异常 code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
-								break;
-							default:
-								Toast.makeText(LoginActivity.this, "ml_sign_in_failed code: " + i + ", message:" + s, Toast.LENGTH_LONG).show();
-								break;
-						}
-					}
-				});
-			}
+		//startActivity(new Intent(this,MainActivity.class));
+		finish();
+	}
 
+	@Override
+	public void signInError(String str) {
+		ToastUtils.show(this,str);
+	}
 
-			@Override
-			public void onProgress(int i, String s) {
-
-			}
-		});
+	@Override
+	public void signOutSuccess() {
+		finish();
 	}
 
 
+	@Override
+	public void setPresenter(SignInContract.Presenter presenter) {
+
+	}
 }

@@ -7,17 +7,17 @@ import android.app.UiModeManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
-import android.support.v7.app.AppCompatDelegate;
-import android.view.View;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMOptions;
-import com.starmelon.lovelife.bean.User;
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
+import com.starmelon.lovelife.data.User;
 import com.starmelon.lovelife.db.local.GreenDaoManager;
 import com.starmelon.lovelife.util.SPutils;
-import com.starmelon.lovelife.util.volley.RequestManager;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.https.HttpsUtils;
 import com.zhy.http.okhttp.log.LoggerInterceptor;
@@ -50,11 +50,25 @@ public class MyApplication extends Application {
 	private static User user;
 
 
+	public static RefWatcher getRefWatcher(Context context) {
+		MyApplication application = (MyApplication) context.getApplicationContext();
+		return application.refWatcher;
+	}
+
+	private RefWatcher refWatcher;
+
+
 	@Override
 	public void onCreate() {
 		// TODO Auto-generated method stub
 		super.onCreate();
 
+		refWatcher = LeakCanary.install(this);
+
+		inti();
+	}
+
+	public void inti(){
 		//初始化全局上下文
 		context = getApplicationContext();
 
@@ -82,8 +96,11 @@ public class MyApplication extends Application {
 				.build();
 		OkHttpUtils.initClient(okHttpClient);
 
+		Log.v("initEnvir","OkHttp初始化成功");
+
 		//初始化ShareSDK
 		ShareSDK.initSDK(this);
+		Log.v("initEnvir","ShareSDK初始化成功");
 
 		//初始化用于切换夜间模式的Cover
 		cover = new ImageView(context);
@@ -95,19 +112,21 @@ public class MyApplication extends Application {
 		oa.setDuration(600);
 
 		//读取夜间模式
-		if ((Boolean) SPutils.get(getContext(),"NigthMode",false) == false){
-			UiModeManager mUiModeManager = (UiModeManager) getContext().getSystemService(Context.UI_MODE_SERVICE);
-			mUiModeManager.setNightMode(UiModeManager.MODE_NIGHT_NO);
-		}else {
-			UiModeManager mUiModeManager = (UiModeManager) getContext().getSystemService(Context.UI_MODE_SERVICE);
-			mUiModeManager.setNightMode(UiModeManager.MODE_NIGHT_YES);
-		}
+//		if ((Boolean) SPutils.get(getContext(),"NigthMode",false) == false){
+//			UiModeManager mUiModeManager = (UiModeManager) getContext().getSystemService(Context.UI_MODE_SERVICE);
+//			mUiModeManager.setNightMode(UiModeManager.MODE_NIGHT_NO);
+//		}else {
+//			UiModeManager mUiModeManager = (UiModeManager) getContext().getSystemService(Context.UI_MODE_SERVICE);
+//			mUiModeManager.setNightMode(UiModeManager.MODE_NIGHT_YES);
+//		}
 
 		//初始化GreenDao
 		GreenDaoManager.getInstance();
+		Log.v("initEnvir","GreenDao初始化成功");
 
 		// 初始化环信SDK
 		initEasemob();
+		Log.v("initEnvir","环信SDK初始化成功");
 	}
 
 	public static Context getContext(){

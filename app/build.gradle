@@ -21,7 +21,7 @@ android {
     buildToolsVersion "25.0.0"
     defaultConfig {
         applicationId "com.starmelon.lovelife"
-        minSdkVersion 22
+        minSdkVersion 21
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -69,6 +69,8 @@ dependencies {
 
     //toggle控件
     compile 'com.zcw:togglebutton-library:1.0.0'
+    //compile 'com.kyleduo.switchbutton:library:1.4.4'
+    //compile 'ch.ielse:switchbutton:1.0.0'
 
     //Tab控件
     compile 'com.shizhefei:ViewPagerIndicator:1.1.3'
@@ -85,12 +87,13 @@ dependencies {
     compile 'com.github.gabrielemariotti.recyclerview:recyclerview-animators:0.3.0-SNAPSHOT@aar'
 
     //下拉刷新，加载更多
-    compile 'in.srain.cube:ultra-ptr:1.0.11'
-    compile 'com.shizhefei:MVCHelper-Library:1.0.7'
-    compile 'com.shizhefei:MVCHelper-UltraRefresh:1.0.7'
+    //compile 'in.srain.cube:ultra-ptr:1.0.11'
+    compile 'com.shizhefei:MVCHelper-Library:1.0.8'
+    compile 'com.shizhefei:MVCHelper-SwipeRefresh:1.0.7'
+    //compile 'com.shizhefei:MVCHelper-UltraRefresh:1.0.8'
 
     //网络框架
-    compile 'com.shizhefei:MVCHelper-OkHttp:1.0.7'
+    compile 'com.shizhefei:MVCHelper-OkHttp:1.0.8'
 
     //Json解析
     compile 'com.google.code.gson:gson:2.3.1'
@@ -104,4 +107,8 @@ dependencies {
 
     //添加环信SDK
     compile files('libs/hyphenatechat_3.2.1.jar')
+    compile project(path: ':switchbutton')
+
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3'
 }

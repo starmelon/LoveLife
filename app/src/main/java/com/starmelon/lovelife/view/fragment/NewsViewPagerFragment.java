@@ -1,7 +1,6 @@
 package com.starmelon.lovelife.view.fragment;
 
 import android.annotation.SuppressLint;
-import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -10,34 +9,33 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.shizhefei.fragment.LazyFragment;
 import com.shizhefei.mvc.MVCHelper;
-import com.shizhefei.mvc.MVCUltraHelper;
+import com.shizhefei.mvc.MVCSwipeRefreshHelper;
 import com.shizhefei.view.indicator.BannerComponent;
 import com.shizhefei.view.indicator.Indicator;
 import com.shizhefei.view.indicator.slidebar.ColorBar;
 import com.shizhefei.view.indicator.slidebar.ScrollBar;
 import com.starmelon.lovelife.R;
+import com.starmelon.lovelife.adapter.AlphaAnimatorAdapterWithIData;
 import com.starmelon.lovelife.adapter.BannerAdapter;
 import com.starmelon.lovelife.adapter.NewsListViewAdapter;
-import com.starmelon.lovelife.adapter.AlphaAnimatorAdapterWithIData;
 import com.starmelon.lovelife.bean.enties.HotNews;
 import com.starmelon.lovelife.db.net.News_DataSource;
-import com.starmelon.lovelife.view.custom.DividerItemDecoration;
 import com.starmelon.lovelife.view.activity.NewsDetailActivity;
+import com.starmelon.lovelife.view.custom.DividerItemDecoration;
 
 import java.util.List;
 
-import in.srain.cube.views.ptr.PtrClassicFrameLayout;
 import it.gmariotti.recyclerview.itemanimator.SlideScaleInOutRightItemAnimator;
 
 
@@ -53,6 +51,8 @@ public class NewsViewPagerFragment extends LazyFragment {
     private MVCHelper<List<HotNews>> mvcHelper;
     private BannerComponent bannerComponent;
 
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
     @Override
     protected View getPreviewLayout(LayoutInflater inflater, ViewGroup container) {
         return inflater.inflate(R.layout.layout_preview, container, false);
@@ -65,37 +65,19 @@ public class NewsViewPagerFragment extends LazyFragment {
         position = getArguments().getInt(INTENT_INT_POSITION);
         setContentView(R.layout.fragment_view_pager);
 
-        PtrClassicFrameLayout mPtrFrameLayout = (PtrClassicFrameLayout) findViewById(R.id.rotate_header_list_view_frame);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refreshLayout);
+
+
+//        PtrClassicFrameLayout mPtrFrameLayout = (PtrClassicFrameLayout) findViewById(R.id.rotate_header_list_view_frame);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(
                 getActivity(), DividerItemDecoration.VERTICAL_LIST));
-
+//
         recyclerView.setItemAnimator(new SlideScaleInOutRightItemAnimator(recyclerView));
-
-
-
-//        recyclerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                @Override
-//                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                    //Toast.makeText(getContext(), "你按到了" + position, Toast.LENGTH_SHORT).show();
 //
-//                	HotNews news = mAdapter.getItem(position);
-//                	final int newsid = news.id;
-//                	Intent intent = new Intent(getContext(),NewsDetailActivity.class);
-//                	intent.putExtra("id", newsid);
 //
-//                    startActivity(intent);
-////                	if (position >= 0) {
-////                    	HotNews ht = mAdapter.getItem(position);
-////                        final String url = ht!=null?ht.img:null;
-////                        if (!TextUtils.isEmpty(url)) {
-////                            getContext().pushFragmentToBackStack(MaterialStyleFragment.class, url);
-////                        }
-////                    }
-//                }
-//            });
-
+//
         //初始化轮播控件
         View view = inflater.inflate(R.layout.ad_banner,recyclerView,false);
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.banner_viewPager);
@@ -106,13 +88,15 @@ public class NewsViewPagerFragment extends LazyFragment {
         bannerComponent = new BannerComponent(indicator, viewPager, false);
         bannerComponent.setAdapter(new BannerAdapter());
         bannerComponent.setAutoPlayTime(2500);
+//
+//
+        MVCHelper<List<HotNews>> mvcHelper = new MVCSwipeRefreshHelper<List<HotNews>>(mSwipeRefreshLayout);
 
-
-        mvcHelper = new MVCUltraHelper<List<HotNews>>(mPtrFrameLayout);
-
+//        mvcHelper = new MVCUltraHelper<List<HotNews>>(mPtrFrameLayout);
+//
         // 设置数据源
         mvcHelper.setDataSource(new News_DataSource(position));
-
+//
         NewsListViewAdapter newsListViewAdapter = new NewsListViewAdapter(this.getContext());
         newsListViewAdapter.setHeaderView(view);
         newsListViewAdapter.setOnItemClickLitener(new NewsListViewAdapter.OnItemClickListener() {

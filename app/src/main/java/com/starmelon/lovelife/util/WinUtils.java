@@ -1,8 +1,11 @@
 package com.starmelon.lovelife.util;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.DisplayMetrics;
 import android.view.Display;
+import android.view.View;
 import android.view.WindowManager;
 
 import java.lang.reflect.Method;
@@ -13,6 +16,21 @@ import java.lang.reflect.Method;
  */
 
 public class WinUtils {
+
+    private static WinUtils INSTANCE = null;
+
+    private WinUtils(){}
+
+    public static WinUtils getInstance(){
+
+        if (INSTANCE == null) {
+            INSTANCE = new WinUtils();
+
+        }
+        return INSTANCE;
+    }
+
+
 
     /**
      * 获得状态栏的高度
@@ -111,5 +129,21 @@ public class WinUtils {
      */
     public static int getContentHeight(Context context){
         return getDpi(context) - getBottomVirtualHeight(context) - getStatusHeight(context);
+    }
+
+    public static Bitmap getScreenShot(Activity activity){
+
+        View v = activity.getWindow().getDecorView();
+        v.setDrawingCacheEnabled(true);
+        v.buildDrawingCache();
+
+        int statusBarHeight = WinUtils.getStatusHeight(activity);
+        int contentHeight = WinUtils.getContentHeight(activity);
+        int screenWidth = WinUtils.getScreenWidth(activity);
+
+        Bitmap screenshot = Bitmap.createBitmap(v.getDrawingCache(),0,statusBarHeight,screenWidth,contentHeight,null,false);
+        v.setDrawingCacheEnabled(false);
+
+        return screenshot;
     }
 }

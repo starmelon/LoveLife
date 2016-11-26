@@ -1,4 +1,4 @@
-package com.starmelon.lovelife.bean;
+package com.starmelon.lovelife.data;
 
 /**
  * Created by starmelon on 2016/11/17 0017.

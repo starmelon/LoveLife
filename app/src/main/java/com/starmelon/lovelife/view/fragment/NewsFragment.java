@@ -18,43 +18,43 @@ public class NewsFragment extends LazyFragment
 {
     private IndicatorViewPager indicatorViewPager;
     private LayoutInflater inflate;
-    public static final String INTENT_STRING_TABNAME = "intent_String_tabname";
-    public static final String INTENT_INT_INDEX = "intent_int_index";
+
     private String tabName;
     private int index;
 
     @Override
     protected void onCreateViewLazy(Bundle savedInstanceState) {
         super.onCreateViewLazy(savedInstanceState);
-        setContentView(R.layout.fragment_tab_news);
-        Resources res = getResources();
 
-        Bundle bundle = getArguments();
-        tabName = bundle.getString(INTENT_STRING_TABNAME);
-        index = bundle.getInt(INTENT_INT_INDEX);
+
+        setContentView(R.layout.fragment_tab_news);
+
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.fragment_tabmain_viewPager);
+        viewPager.setOffscreenPageLimit(4);
+
         Indicator indicator = (Indicator) findViewById(R.id.fragment_tabmain_indicator);
 
         //设置tab下标
         indicator.setScrollBar(new ColorBar(getApplicationContext(),getResources().getColor(R.color.tab_top_scrollbar),5));
 
-
         float unSelectSize = 14;
         float selectSize = unSelectSize * 1.2f;
+        int selectColor = getResources().getColor(R.color.tab_top_text_2);
+        int unSelectColor = getResources().getColor(R.color.tab_top_text_1);
 
-        int selectColor = res.getColor(R.color.tab_top_text_2);
-        int unSelectColor = res.getColor(R.color.tab_top_text_1);
         indicator.setOnTransitionListener(new OnTransitionTextListener().setColor(selectColor, unSelectColor).setSize(selectSize, unSelectSize));
 
-        viewPager.setOffscreenPageLimit(4);
+
 
         indicatorViewPager = new IndicatorViewPager(indicator, viewPager);
-        inflate = LayoutInflater.from(getApplicationContext());
-
-        // 注意这里 的FragmentManager 是 getChildFragmentManager(); 因为是在Fragment里面
-        // 而在activity里面用FragmentManager 是 getSupportFragmentManager()
         indicatorViewPager.setAdapter(new NewsFragmentViewPagerAdapter(getChildFragmentManager()));
+
+        inflate = LayoutInflater.from(getActivity());
+
+//         注意这里 的FragmentManager 是 getChildFragmentManager(); 因为是在Fragment里面
+//         而在activity里面用FragmentManager 是 getSupportFragmentManager()
+
 
         Log.d("cccc", "Fragment 将要创建View " + this);
 

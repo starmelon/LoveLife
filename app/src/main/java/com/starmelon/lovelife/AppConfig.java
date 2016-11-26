@@ -1,9 +1,16 @@
 package com.starmelon.lovelife;
 
+import android.app.Application;
+import android.app.UiModeManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.view.View;
+
+import com.starmelon.lovelife.util.SPutils;
+import com.starmelon.lovelife.util.WinUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,6 +27,9 @@ import java.util.Properties;
  * @created 2014年9月25日 下午5:29:00
  */
 public class AppConfig {
+
+    public final static boolean NIGHT = true;
+    public final static boolean DAY = false;
 
     private final static String APP_CONFIG = "config";
 
@@ -59,15 +69,76 @@ public class AppConfig {
             + File.separator + "download" + File.separator;
 
     private Context mContext;
-    private static AppConfig appConfig;
+    private static AppConfig INSTANCE = null;
 
-    public static AppConfig getAppConfig(Context context) {
-        if (appConfig == null) {
-            appConfig = new AppConfig();
-            appConfig.mContext = context;
+    private boolean isNightMode;
+    private boolean isNightModeChanging;
+
+
+    public static AppConfig getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new AppConfig();
+            INSTANCE.mContext = MyApplication.getContext();
+            INSTANCE.iniConfig();
         }
-        return appConfig;
+        return INSTANCE;
     }
+
+    public boolean isNightMode() {
+        return isNightMode;
+    }
+
+    public boolean isNightModeChanging() {
+        return isNightModeChanging;
+    }
+
+    public void setNightModeChanging(boolean nightModeChanging) {
+        isNightModeChanging = nightModeChanging;
+    }
+
+    private void iniConfig(){
+        isNightMode = getNightModeSetting();
+        isNightModeChanging = false;
+    }
+
+
+
+    /**
+     * 获取夜间模式的保存状态
+     * @return
+     */
+    private boolean getNightModeSetting(){
+        return (boolean) SPutils.get(mContext,"NigthMode",false);
+    }
+
+    public Bitmap theLastViewCut = null;
+
+    public void setNightMode(boolean isNight){
+
+//        //setScreenshot();
+//        UiModeManager mUiModeManager = (UiModeManager) ActivityManager.currentActivity().getSystemService(Context.UI_MODE_SERVICE);
+//
+//        if (isNight){
+//            mUiModeManager.setNightMode(UiModeManager.MODE_NIGHT_YES);
+//        }else{
+//            mUiModeManager.setNightMode(UiModeManager.MODE_NIGHT_NO);
+//        }
+//        SPutils.put(MyApplication.getContext(),"NigthMode",isNight);
+        isNightMode = isNight;
+    }
+
+    private void setScreenshot() {
+        View v = ActivityManager.currentActivity().getWindow().getDecorView();
+        v.setDrawingCacheEnabled(true);
+        v.buildDrawingCache();
+
+        int statusBarHeight = WinUtils.getStatusHeight(MyApplication.getContext());
+        int contentHeight = WinUtils.getContentHeight(MyApplication.getContext());
+        int screenWidth = WinUtils.getScreenWidth(MyApplication.getContext());
+
+        theLastViewCut = Bitmap.createBitmap(v.getDrawingCache(),0,statusBarHeight,screenWidth,contentHeight,null,false);
+    }
+
 
     /**
      * 获取Preference设置

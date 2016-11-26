@@ -9,8 +9,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.shizhefei.view.indicator.IndicatorViewPager;
+import com.starmelon.lovelife.ActivityManager;
 import com.starmelon.lovelife.MyApplication;
 import com.starmelon.lovelife.R;
+import com.starmelon.lovelife.view.fragment.CollectionFragment;
 import com.starmelon.lovelife.view.fragment.NewsViewPagerFragment;
 
 public class NewsFragmentViewPagerAdapter extends IndicatorViewPager.IndicatorFragmentPagerAdapter {
@@ -21,6 +23,7 @@ public class NewsFragmentViewPagerAdapter extends IndicatorViewPager.IndicatorFr
 
     public NewsFragmentViewPagerAdapter(FragmentManager fragmentManager) {
         super(fragmentManager);
+
     }
 
     @Override
@@ -41,6 +44,7 @@ public class NewsFragmentViewPagerAdapter extends IndicatorViewPager.IndicatorFr
         TextView textView = (TextView) convertView;
         textView.setText(tabNames[position]);
         return convertView;
+
     }
 
     @Override
@@ -51,5 +55,7 @@ public class NewsFragmentViewPagerAdapter extends IndicatorViewPager.IndicatorFr
         bundle.putInt(NewsViewPagerFragment.INTENT_INT_POSITION, position);
         mainFragment.setArguments(bundle);
         return mainFragment;
+
+//        return new CollectionFragment();
     }
 }

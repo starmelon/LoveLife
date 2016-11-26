@@ -28,6 +28,7 @@ import com.starmelon.lovelife.db.net.API;
 import com.starmelon.lovelife.db.net.ApiManager;
 import com.starmelon.lovelife.db.net.GenericsCallback;
 import com.starmelon.lovelife.db.net.JsonGenericsSerializator;
+import com.starmelon.lovelife.presenter.BasePresenter;
 
 
 import cn.sharesdk.framework.ShareSDK;
@@ -66,6 +67,11 @@ public class NewsDetailActivity extends BaseActivity {
 
 
 		
+	}
+
+	@Override
+	protected BasePresenter createPresenter() {
+		return null;
 	}
 
 	private void initData() {

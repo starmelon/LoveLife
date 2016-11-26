@@ -4,9 +4,12 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -15,6 +18,8 @@ import com.starmelon.lovelife.R;
 import com.starmelon.lovelife.adapter.NewsCollecionAdapter;
 import com.starmelon.lovelife.bean.enties.Collection;
 import com.starmelon.lovelife.db.local.CollectionDaoLHelper;
+import com.starmelon.lovelife.presenter.BasePresenter;
+import com.starmelon.lovelife.view.custom.DividerItemDecoration;
 import com.yanzhenjie.recyclerview.swipe.Closeable;
 import com.yanzhenjie.recyclerview.swipe.OnSwipeMenuItemClickListener;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenu;
@@ -26,7 +31,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class CollectionFragment extends LazyFragment
+public class CollectionFragment extends BaseFragment
 {
 	//inflater.inflate(R.layout.fragment_collection, container, false);
 
@@ -38,9 +43,16 @@ public class CollectionFragment extends LazyFragment
 
 	private SwipeMenuRecyclerView mSwipeMenuRecyclerView;
 
+
 	@Override
-	protected void onCreateViewLazy(Bundle savedInstanceState) {
-		super.onCreateViewLazy(savedInstanceState);
+	protected BasePresenter createPresenter() {
+		return null;
+	}
+
+
+	@Override
+	protected void onCreateView(Bundle savedInstanceState) {
+		super.onCreateView(savedInstanceState);
 		setContentView(R.layout.fragment_collection);
 
 		mContext = getActivity();
@@ -49,7 +61,7 @@ public class CollectionFragment extends LazyFragment
 		mSwipeMenuRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));// 布局管理器。
 		mSwipeMenuRecyclerView.setHasFixedSize(true);// 如果Item够简单，高度是确定的，打开FixSize将提高性能。
 		mSwipeMenuRecyclerView.setItemAnimator(new DefaultItemAnimator());// 设置Item默认动画，加也行，不加也行。
-		mSwipeMenuRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));// 添加分割线。
+		mSwipeMenuRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL_LIST));// 添加分割线。
 
 		// 为SwipeRecyclerView的Item创建菜单就两句话，不错就是这么简单：
 		// 设置菜单创建器。
@@ -64,12 +76,13 @@ public class CollectionFragment extends LazyFragment
 		mSwipeMenuRecyclerView.setAdapter(mNewCollecionAdapter);
 
 		initData();
+
 	}
 
 	private void initData() {
-//		long time = new Date().getTime();
-//		List<Collection> getCollecions = new CollectionDaoLHelper().getCollectionByTime(time,10);
-//		mCollecions.addAll(getCollecions);
+		long time = new Date().getTime();
+		List<Collection> getCollecions = new CollectionDaoLHelper().getCollectionByTime(time,10);
+		mCollecions.addAll(getCollecions);
 
 	}
 
@@ -136,15 +149,28 @@ public class CollectionFragment extends LazyFragment
 
 
 	@Override
-	public void setUserVisibleHint(boolean isVisibleToUser) {
-		super.setUserVisibleHint(isVisibleToUser);
-		if (isVisibleToUser){
-			//当收藏夹可见时，刷新收藏夹
+	public void onHiddenChanged(boolean hidden) {
+		super.onHiddenChanged(hidden);
+
+		if (!hidden){
 			long time = new Date().getTime();
+			if (mCollecions == null){
+				return;
+			}
 			mCollecions.clear();
 			List<Collection> getCollecions = new CollectionDaoLHelper().getCollectionByTime(time,10);
 			mCollecions.addAll(getCollecions);
 			mNewCollecionAdapter.notifyDataSetChanged();
 		}
+
 	}
+
+//	@Override
+//	public void setUserVisibleHint(boolean isVisibleToUser) {
+//		super.setUserVisibleHint(isVisibleToUser);
+//		if (isVisibleToUser){
+//			//当收藏夹可见时，刷新收藏夹
+//
+//		}
+//	}
 }
