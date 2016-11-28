@@ -16,5 +16,5 @@ public interface UserDataSource {
     }
 
     void signIn (String platform,SignInCallback callback);
-    void signUp ();
+    void signOut();
 }

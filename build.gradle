@@ -22,6 +22,9 @@ allprojects {
 
         //RecycleView动画库
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+
+        //WaitingDots加载动画
+        maven { url "https://jitpack.io" }
     }
 }
 

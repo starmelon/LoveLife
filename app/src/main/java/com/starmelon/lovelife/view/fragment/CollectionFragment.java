@@ -1,6 +1,7 @@
 package com.starmelon.lovelife.view.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.shizhefei.fragment.LazyFragment;
@@ -19,6 +21,7 @@ import com.starmelon.lovelife.adapter.NewsCollecionAdapter;
 import com.starmelon.lovelife.bean.enties.Collection;
 import com.starmelon.lovelife.db.local.CollectionDaoLHelper;
 import com.starmelon.lovelife.presenter.BasePresenter;
+import com.starmelon.lovelife.view.activity.NewsDetailActivity;
 import com.starmelon.lovelife.view.custom.DividerItemDecoration;
 import com.yanzhenjie.recyclerview.swipe.Closeable;
 import com.yanzhenjie.recyclerview.swipe.OnSwipeMenuItemClickListener;
@@ -44,6 +47,8 @@ public class CollectionFragment extends BaseFragment
 	private SwipeMenuRecyclerView mSwipeMenuRecyclerView;
 
 
+	private TextView mTxtEmty;
+
 	@Override
 	protected BasePresenter createPresenter() {
 		return null;
@@ -56,6 +61,9 @@ public class CollectionFragment extends BaseFragment
 		setContentView(R.layout.fragment_collection);
 
 		mContext = getActivity();
+
+		mTxtEmty = (TextView) findViewById(R.id.tv_empty);
+
 
 		mSwipeMenuRecyclerView = (SwipeMenuRecyclerView) findViewById(R.id.recycler_view);
 		mSwipeMenuRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));// 布局管理器。
@@ -81,8 +89,8 @@ public class CollectionFragment extends BaseFragment
 
 	private void initData() {
 		long time = new Date().getTime();
-		List<Collection> getCollecions = new CollectionDaoLHelper().getCollectionByTime(time,10);
-		mCollecions.addAll(getCollecions);
+		List<Collection> collections = new CollectionDaoLHelper().getCollectionByTime(time,10);
+		mCollecions.addAll(collections);
 
 	}
 
@@ -117,7 +125,14 @@ public class CollectionFragment extends BaseFragment
 	private NewsCollecionAdapter.OnItemClickListener onItemClickListener = new NewsCollecionAdapter.OnItemClickListener() {
 		@Override
 		public void onItemClick(int position) {
-			Toast.makeText(mContext, "我是第" + position + "条。", Toast.LENGTH_SHORT).show();
+
+			Intent intent = new Intent(getContext(),NewsDetailActivity.class);
+			Bundle bundle = new Bundle();
+			bundle.putInt("hotNewsId", mCollecions.get(position).getNewsid());
+			intent.putExtras(bundle);
+			startActivity(intent);
+
+			//Toast.makeText(mContext, "我是第" + position + "条。", Toast.LENGTH_SHORT).show();
 		}
 	};
 
@@ -143,6 +158,12 @@ public class CollectionFragment extends BaseFragment
 				new CollectionDaoLHelper().deleteCollecion(mCollecions.get(adapterPosition).getNewsid());
 				mCollecions.remove(adapterPosition);
 				mNewCollecionAdapter.notifyItemRemoved(adapterPosition);
+
+				if (mCollecions.size()>0){
+					mTxtEmty.setVisibility(View.GONE);
+				}else {
+					mTxtEmty.setVisibility(View.VISIBLE);
+				}
 			}
 		}
 	};
@@ -158,12 +179,19 @@ public class CollectionFragment extends BaseFragment
 				return;
 			}
 			mCollecions.clear();
-			List<Collection> getCollecions = new CollectionDaoLHelper().getCollectionByTime(time,10);
-			mCollecions.addAll(getCollecions);
+			List<Collection> collections = new CollectionDaoLHelper().getCollectionByTime(time,10);
+			mCollecions.addAll(collections);
 			mNewCollecionAdapter.notifyDataSetChanged();
+			if (collections.size()>0){
+				mTxtEmty.setVisibility(View.GONE);
+			}else {
+				mTxtEmty.setVisibility(View.VISIBLE);
+			}
 		}
 
 	}
+
+
 
 //	@Override
 //	public void setUserVisibleHint(boolean isVisibleToUser) {

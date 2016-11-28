@@ -20,7 +20,6 @@ import com.starmelon.lovelife.R;
 import com.starmelon.lovelife.db.local.GreenDaoManager;
 import com.starmelon.lovelife.presenter.BasePresenter;
 import com.starmelon.lovelife.util.SPutils;
-import com.starmelon.lovelife.view.fragment.UserActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.https.HttpsUtils;
 import com.zhy.http.okhttp.log.LoggerInterceptor;

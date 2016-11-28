@@ -14,6 +14,7 @@ import com.starmelon.lovelife.MyApplication;
 import com.starmelon.lovelife.R;
 import com.starmelon.lovelife.bean.enties.HotNews;
 import com.starmelon.lovelife.db.net.API;
+import com.starmelon.lovelife.util.TimeUtils;
 
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -76,7 +77,7 @@ public class NewsListViewAdapter extends RecycleViewAdapterWithIData<NewsListVie
 		}
 
 		holder.title.setText(hotNewses.get(pos).getTitle());
-		holder.time.setText(hotNewses.get(pos).getTime());
+		holder.time.setText(TimeUtils.long2String(hotNewses.get(pos).getTime()));
 		holder.count.setText(hotNewses.get(pos).getCount()+"");
 
 		//region 如果设置了回调，则设置点击事件

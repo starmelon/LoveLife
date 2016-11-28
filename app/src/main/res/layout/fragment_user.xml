@@ -62,50 +62,12 @@
             android:text="夜间模式"
             />
 
-        <!--<com.kyleduo.switchbutton.SwitchButton-->
-            <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
-            <!--android:id="@+id/togglebtn_daynight"-->
-            <!--android:layout_width="50dp"-->
-            <!--android:layout_height="24dp"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--app:kswAnimationDuration="300"-->
-            <!--app:kswBackDrawable="@drawable/ios_back_drawable"-->
-            <!--app:kswBackMeasureRatio="1.4"-->
-            <!--app:kswThumbDrawable="@drawable/ios_thumb_selector"-->
-            <!--app:kswThumbMarginBottom="-8dp"-->
-            <!--app:kswThumbMarginLeft="-5dp"-->
-            <!--app:kswThumbMarginRight="-5dp"-->
-            <!--app:kswThumbMarginTop="-2.5dp"/>-->
-
-        <!--<ToggleButton-->
-            <!--android:id="@+id/togglebtn_daynight"-->
-            <!--android:layout_width="50dp"-->
-            <!--android:layout_height="24dp"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_centerVertical="true" />-->
-
         <com.starmelon.switchbutton.SwitchView
             android:id="@+id/togglebtn_daynight"
             android:layout_width="50dp"
             android:layout_height="24dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"/>
-
-        <!--<com.zcw.togglebutton.ToggleButton-->
-            <!--xmlns:toggle="http://schemas.android.com/apk/res-auto"-->
-            <!--android:id="@+id/togglebtn_daynight"-->
-            <!--android:layout_width="50dp"-->
-            <!--android:layout_height="24dp"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--toggle:tbOnColor="#3D81FC"-->
-            <!--toggle:tbOffColor="#ddd"-->
-            <!--toggle:tbSpotColor="#FFFFFF"-->
-            <!--toggle:tbOffBorderColor="@null"-->
-            <!--toggle:tbBorderWidth="2dp"-->
-            <!--android:textOff="白天">-->
-        <!--</com.zcw.togglebutton.ToggleButton>-->
 
     </RelativeLayout>
 
@@ -134,20 +96,15 @@
             android:layout_marginLeft="10dp"
             android:text="设置" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:scaleY="1.5"
-            android:text=">"
-            android:textSize="20sp" />
+            android:src="@drawable/arrow_right"/>
+
+
     </RelativeLayout>
 
-    <!--<View-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="1dp"-->
-        <!--android:background="@color/bg_divide" />-->
 
     <View
         android:layout_width="match_parent"
@@ -175,14 +132,12 @@
             android:layout_marginLeft="10dp"
             android:text="留言大厅" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:text=">"
-            android:scaleY="1.5"
-            android:textSize="20sp" />
+            android:src="@drawable/arrow_right"/>
+
     </RelativeLayout>
 
 
@@ -213,14 +168,12 @@
             android:layout_marginLeft="10dp"
             android:text="关于" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:text=">"
-            android:scaleY="1.5"
-            android:textSize="20sp" />
+            android:src="@drawable/arrow_right"/>
+
     </RelativeLayout>
 
     <View

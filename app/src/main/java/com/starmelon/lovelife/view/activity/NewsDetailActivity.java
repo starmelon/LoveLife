@@ -1,43 +1,53 @@
 package com.starmelon.lovelife.view.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Outline;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewOutlineProvider;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.starmelon.lovelife.MyApplication;
 import com.starmelon.lovelife.R;
 import com.starmelon.lovelife.bean.NewsDetail;
-import com.starmelon.lovelife.bean.enties.Collection;
 import com.starmelon.lovelife.bean.enties.HotNews;
-import com.starmelon.lovelife.db.local.CollectionDaoLHelper;
 import com.starmelon.lovelife.db.net.API;
-import com.starmelon.lovelife.db.net.ApiManager;
-import com.starmelon.lovelife.db.net.GenericsCallback;
-import com.starmelon.lovelife.db.net.JsonGenericsSerializator;
-import com.starmelon.lovelife.presenter.BasePresenter;
+import com.starmelon.lovelife.presenter.NewsDetailContact;
+import com.starmelon.lovelife.presenter.NewsDetailPresenter;
+import com.starmelon.lovelife.util.TimeUtils;
+import com.starmelon.lovelife.util.ToastUtils;
 
 
+import java.util.HashMap;
+
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
 
 import cn.sharesdk.onekeyshare.OnekeyShare;
 
-import okhttp3.Call;
+import pl.tajchert.sample.DotsTextView;
 
-public class NewsDetailActivity extends BaseActivity {
+public class NewsDetailActivity extends BaseActivity<NewsDetailContact.View,NewsDetailPresenter> implements NewsDetailContact.View {
+
+	private RelativeLayout mLoading;
+	private DotsTextView mDots;
+
+	private LinearLayout mFailed;
+	private ImageView mBtn_Refresh;
+
+	private ScrollView mContent;
 
 	private LinearLayout ll_tab;
 	private ImageView mImg;
@@ -50,8 +60,6 @@ public class NewsDetailActivity extends BaseActivity {
 	private ImageButton mBtn_collect;
 	private ImageButton mBtn_share;
 
-	private boolean isCollected;
-	private HotNews mHotNews;
 	NewsDetail mNewsDetail;
 	
 	@Override
@@ -62,7 +70,6 @@ public class NewsDetailActivity extends BaseActivity {
 		setContentView(R.layout.activity_newsdetail);
 		
 		iniView();
-		initEvent();
 		initData();
 
 
@@ -70,41 +77,43 @@ public class NewsDetailActivity extends BaseActivity {
 	}
 
 	@Override
-	protected BasePresenter createPresenter() {
-		return null;
+	protected NewsDetailPresenter createPresenter() {
+		return new NewsDetailPresenter();
 	}
 
 	private void initData() {
 
+		mDots.start();
+
 		Intent intent = getIntent();
-		mHotNews = (HotNews) intent.getSerializableExtra("hotNews");
+		int hotNewsId = intent.getIntExtra("hotNewsId",-1);
+		//HotNews hotnews = (HotNews) intent.getSerializableExtra("hotNewsId");
 
 
-		mTv_title.setText(mHotNews.getTitle());
-		mTv_time.setText(mHotNews.getTime());
-		mTv_provenance.setText(mHotNews.getFromname());
-		mTv_count.setText(mHotNews.getCount() + "");
-
-
-
-
+		//获取详细新闻信息
+		mPresenter.loadNewsDetail(hotNewsId);
 
 		//判断是否已收藏过
-		Collection collection = new CollectionDaoLHelper().getCollecionByID(mHotNews.getId());
-		isCollected = collection == null ? false : true;
+		mPresenter.showCollectState();
 
-		if (mHotNews.getImg().equals(API.API_IMAGE + "/top/default.jpg")){
-			mImg.setVisibility(View.GONE);
-			//Picasso.with(MyApplication.getContext()).load(R.drawable.img_default).into(mImg);
-		}else
-		{
-			Picasso.with(MyApplication.getContext()).load(mHotNews.getImg()).into(mImg);
-		}
-
-		getData(mHotNews.getId());
 	}
 
 	private void iniView() {
+
+		mLoading = (RelativeLayout) findViewById(R.id.rl_loading);
+		mDots = (DotsTextView) findViewById(R.id.dots);
+
+		mFailed = (LinearLayout) findViewById(R.id.rl_failed);
+		mBtn_Refresh = (ImageView) findViewById(R.id.btn_refresh);
+		mBtn_Refresh.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				mPresenter.reloadNewsDetail();
+			}
+		});
+
+		mContent = (ScrollView) findViewById(R.id.content);
+
 		mTv_title = (TextView) findViewById(R.id.tv_title);
 		mTv_time = (TextView) findViewById(R.id.tv_time);
 		mTv_provenance = (TextView) findViewById(R.id.tv_provenance);
@@ -118,20 +127,8 @@ public class NewsDetailActivity extends BaseActivity {
 		mBtn_collect.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				if (mNewsDetail != null){
-					CollectionDaoLHelper cdl = new CollectionDaoLHelper();
 
-					if (isCollected){
-						Toast.makeText(NewsDetailActivity.this,"已收藏过",Toast.LENGTH_SHORT).show();
-					}else {
-						new CollectionDaoLHelper().addCollection(mHotNews.getId(),mHotNews.getTitle());
-						isCollected = true;
-						Toast.makeText(NewsDetailActivity.this,"收藏成功",Toast.LENGTH_SHORT).show();
-
-					}
-
-
-				}
+				mPresenter.collectNews();
 
 			}
 		});
@@ -142,7 +139,7 @@ public class NewsDetailActivity extends BaseActivity {
 			
 			@Override
 			public void onClick(View v) {
-				showShare();
+				mPresenter.shareNews();
 			}
 		});
 
@@ -159,56 +156,85 @@ public class NewsDetailActivity extends BaseActivity {
 		ll_tab.setOutlineProvider(viewOutlineProvider);
 
 	}
-	
-	private void initEvent()
-	{
+
+
+	@Override
+	public void showLoading() {
+
+		mDots.start();
+		mLoading.setVisibility(View.VISIBLE);
+
+		mContent.setVisibility(View.GONE);
+		ll_tab.setVisibility(View.GONE);
+		mFailed.setVisibility(View.GONE);
 
 	}
-	
-	/**
-	 * 获取文章详细信息
-	 * @param id
-	 */
-	private void getData(int id) {
 
-		ApiManager.getNewsDetailById(new GenericsCallback<NewsDetail>(new JsonGenericsSerializator()) {
-
-			@Override
-			public void onError(Call call, Exception e, int id) {
-
-			}
-
-			@Override
-			public void onResponse(NewsDetail response, int id) {
-
-				if (response == null) {
-					Toast.makeText(getApplicationContext(), "获取数据失败", Toast.LENGTH_SHORT).show();
-					return;
-				}
-
-				mNewsDetail = response;
-
-//				if (mNewsDetail.img.equals("/top/default.jpg")){
-//					mImg.setVisibility(View.GONE);
-//					//Picasso.with(MyApplication.getContext()).load(R.drawable.img_default).into(mImg);
-//				}else
-//				{
-//					Picasso.with(MyApplication.getContext()).load(API.API_IMAGE+ mNewsDetail.img).into(mImg);
-//				}
-				//Picasso.with(MyApplication.getContext()).load(mNewsDetail..getImg()).into(mImg);
-				String content = Html.fromHtml(mNewsDetail.message).toString();
-				mTv_content.setText(content.replace((char)65532,' '));
-
-			}
-		},id);
+	@Override
+	public void loadNewsDetailSucceed(NewsDetail newsDetail) {
 
 
-		
+		if (newsDetail.img.equals(API.API_IMAGE + "/top/default.jpg")){
+			mImg.setVisibility(View.GONE);
+		}else
+		{
+			Picasso.with(MyApplication.getContext()).load(newsDetail.img).into(mImg);
+		}
+
+		mTv_title.setText(newsDetail.title);
+		mTv_time.setText(TimeUtils.long2String(newsDetail.time));
+		mTv_provenance.setText(newsDetail.fromname);
+		mTv_count.setText(newsDetail.count + "");
+
+		String content = Html.fromHtml(newsDetail.message).toString();
+		mTv_content.setText(content.replace((char)65532,' '));
+
+		mDots.stop();
+		mLoading.setVisibility(View.GONE);
+		mFailed.setVisibility(View.GONE);
+
+		mContent.setVisibility(View.VISIBLE);
+		ll_tab.setVisibility(View.VISIBLE);
 	}
 
-	
-	private void showShare() {
-		ShareSDK.initSDK(this);
+	@Override
+	public void loadNewsDetailFailed(String error) {
+
+
+		mDots.stop();
+		mLoading.setVisibility(View.GONE);
+		mContent.setVisibility(View.GONE);
+		ll_tab.setVisibility(View.GONE);
+
+		mFailed.setVisibility(View.VISIBLE);
+
+
+	}
+
+	@Override
+	public void setCollectState(boolean isCollected) {
+
+		if (isCollected){
+			mBtn_collect.setImageResource(R.drawable.collected);
+		}else{
+			mBtn_collect.setImageResource(R.drawable.collect);
+		}
+	}
+
+	@Override
+	public void showCollecResult(boolean isCollected) {
+
+		if (isCollected){
+			ToastUtils.show(this,"收藏成功");
+		}else{
+			ToastUtils.show(this,"取消收藏");
+		}
+
+	}
+
+	@Override
+	public void shareNews(NewsDetail newsDetail) {
+
 		OnekeyShare oks = new OnekeyShare();
 		// 关闭sso授权
 		oks.disableSSOWhenAuthorize();
@@ -219,7 +245,7 @@ public class NewsDetailActivity extends BaseActivity {
 		// title标题，印象笔记、邮箱、信息、微信、人人网和QQ空间使用
 		oks.setTitle(getString(R.string.share));
 		// titleUrl是标题的网络链接，仅在人人网和QQ空间使用
-		oks.setTitleUrl(mNewsDetail.fromurl);
+		oks.setTitleUrl(newsDetail.fromurl);
 		// text是分享文本，所有平台都需要这个字段
 		oks.setText("我是分享文本");
 		// imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
@@ -233,17 +259,30 @@ public class NewsDetailActivity extends BaseActivity {
 		// siteUrl是分享此内容的网站地址，仅在QQ空间使用
 		oks.setSiteUrl("http://sharesdk.cn");
 
+		oks.setCallback(new PlatformActionListener() {
+			@Override
+			public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
+
+			}
+
+			@Override
+			public void onError(Platform platform, int i, Throwable throwable) {
+
+			}
+
+			@Override
+			public void onCancel(Platform platform, int i) {
+
+			}
+		});
+
 		// 启动分享GUI
 		oks.show(this);
+
 	}
-	
 
+	@Override
+	public void setPresenter(NewsDetailContact.Presenter presenter) {
 
-
-	
-
-	
-	
-	
-	
+	}
 }

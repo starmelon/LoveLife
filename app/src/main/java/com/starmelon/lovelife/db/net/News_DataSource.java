@@ -119,8 +119,8 @@ public class News_DataSource implements IAsyncDataSource<List<HotNews>> {
                     hotNewses.addAll(dataJson.tngou);
                     for (HotNews hotNews : hotNewses){
                         hotNews.setImg(API.API_IMAGE + hotNews.getImg());
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-                        hotNews.setTime(sdf.format(new Timestamp(Long.parseLong(hotNews.getTime()))));
+                        //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+                        //hotNews.setTime(sdf.format(new Timestamp(Long.parseLong(hotNews.getTime()))));
                     }
 
                     mPage = page;

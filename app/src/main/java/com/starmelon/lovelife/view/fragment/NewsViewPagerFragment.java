@@ -19,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.shizhefei.fragment.LazyFragment;
+import com.shizhefei.mvc.ILoadViewFactory;
 import com.shizhefei.mvc.MVCHelper;
 import com.shizhefei.mvc.MVCSwipeRefreshHelper;
 import com.shizhefei.view.indicator.BannerComponent;
@@ -53,10 +54,10 @@ public class NewsViewPagerFragment extends LazyFragment {
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
-    @Override
-    protected View getPreviewLayout(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(R.layout.layout_preview, container, false);
-    }
+//    @Override
+//    protected View getPreviewLayout(LayoutInflater inflater, ViewGroup container) {
+//        return inflater.inflate(R.layout.layout_preview, container, false);
+//    }
 
     @Override
     protected void onCreateViewLazy(Bundle savedInstanceState) {
@@ -111,26 +112,27 @@ public class NewsViewPagerFragment extends LazyFragment {
 
                 Intent intent = new Intent(getContext(),NewsDetailActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("hotNews", hotNews);
+                bundle.putInt("hotNewsId", hotNews.getId());
+                //bundle.putSerializable("hotNewsId", hotNews.getId());
                 intent.putExtras(bundle);
+                startActivity(intent);
+
                 //intent.putExtra("id", hotNews.getId());
                 //intent.putExtra("news",hotNews.s);
 
-                View img =  view.findViewById(R.id.img_news);
-                View title = view.findViewById(R.id.tv_title);
-                View time =  view.findViewById(R.id.tv_time);
+//                View img =  view.findViewById(R.id.img_news);
+//                View time =  view.findViewById(R.id.tv_time);
+//
+//                Pair<View, String> imgPair = Pair.create(img, getString(R.string.news_pic));
+//                Pair<View, String> timePair = Pair.create(time, getString(R.string.news_time));
+//
+//                ActivityOptionsCompat compat =
+//                        ActivityOptionsCompat.makeSceneTransitionAnimation(
+//                                getActivity(), imgPair, timePair );
 
-                Pair<View, String> imgPair = Pair.create(img, getString(R.string.news_pic));
-                //Pair<View, String> titlePair = Pair.create(title, getString(R.string.news_title));
-                Pair<View, String> timePair = Pair.create(time, getString(R.string.news_time));
+//                ActivityCompat.startActivity(getContext(),intent, compat.toBundle());
 
-                ActivityOptionsCompat compat =
-                        ActivityOptionsCompat.makeSceneTransitionAnimation(
-                                getActivity(), imgPair, timePair );
 
-                ActivityCompat.startActivity(getContext(),intent, compat.toBundle());
-
-                //Pair<View, String> imagePair = Pair.create(vie, getString(R.string.image));
             }
 
             @Override
@@ -144,12 +146,24 @@ public class NewsViewPagerFragment extends LazyFragment {
 
         mvcHelper.setAdapter(animatorAdapter);
 
+//        MVCHelper.setLoadViewFractory(new ILoadViewFactory() {
+//            @Override
+//            public ILoadMoreView madeLoadMoreView() {
+//                return null;
+//            }
+//
+//            @Override
+//            public ILoadView madeLoadView() {
+//                return null;
+//            }
+//        });
 
         // 加载数据
         mvcHelper.refresh();
 
 
     }
+
 
 
 
@@ -175,7 +189,9 @@ public class NewsViewPagerFragment extends LazyFragment {
     protected void onDestroyViewLazy() {
         super.onDestroyViewLazy();
         handler.removeMessages(1);
-
+        if (mvcHelper!= null){
+            mvcHelper.destory();
+        }
     }
 
     @SuppressLint("HandlerLeak")

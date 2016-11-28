@@ -1,11 +1,73 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:dots="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:orientation="vertical"
     >
 
-    <ScrollView 
+    <RelativeLayout
+        android:id="@+id/rl_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center">
+
+
+        <TextView
+            android:id="@+id/tv_loadingtxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Loading"
+            android:textSize="30sp"/>
+
+        <pl.tajchert.sample.DotsTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/tv_loadingtxt"
+            android:id="@+id/dots"
+            android:gravity="center"
+            android:textSize="30sp"
+            android:textColor="?attr/tab_bottom_text_normal"
+            dots:autoplay="false"
+            dots:period="1000"/>
+
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/rl_failed"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_loadfailtxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="数据获取失败，请刷新"
+            android:textSize="16sp"/>
+
+        <ImageView
+            android:id="@+id/btn_refresh"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:scaleType="centerInside"
+            android:src="@drawable/refresh" />
+
+
+    </LinearLayout>
+
+
+
+
+    <ScrollView
+        android:id="@+id/content"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">

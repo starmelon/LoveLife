@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
 
 	private void initViews() {
 
+
 		mTabNews = (LinearLayout) findViewById(R.id.main_tab_news);
 		mTabNews.setOnClickListener(tabClickListener);
 		mTabNewsImg = (ImageView) findViewById(R.id.main_tab_news_img);
@@ -201,6 +202,7 @@ public class MainActivity extends AppCompatActivity {
 				transaction.show(mUserFragment);
 				break;
 		}
+		transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 		transaction.commit();
 		curTabIndex = index;
 	}
@@ -290,7 +292,7 @@ public class MainActivity extends AppCompatActivity {
 
 				@Override
 				public void onAnimationEnd(Animator animator) {
-					recyleCover();
+					recycleCover();
 				}
 
 				@Override
@@ -307,7 +309,7 @@ public class MainActivity extends AppCompatActivity {
 		}
 	}
 
-	private void recyleCover(){
+	private void recycleCover(){
 
 		if (cover != null){
 			if (cover.getParent() != null){
@@ -328,7 +330,7 @@ public class MainActivity extends AppCompatActivity {
 		super.onSaveInstanceState(outState);
 
 		//当进行快速切换夜间模式时，有可能会造成Cover的溢出
-		recyleCover();
+		recycleCover();
 
 		//保存当前页面截图
 		outState.putParcelable("lastView",WinUtils.getScreenShot(this));

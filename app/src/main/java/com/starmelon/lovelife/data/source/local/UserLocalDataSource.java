@@ -25,7 +25,7 @@ public class UserLocalDataSource implements UserDataSource {
     }
 
     @Override
-    public void signUp() {
+    public void signOut() {
 
     }
 }

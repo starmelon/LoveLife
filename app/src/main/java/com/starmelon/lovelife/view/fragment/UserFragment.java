@@ -1,38 +1,25 @@
 package com.starmelon.lovelife.view.fragment;
 
-import android.app.UiModeManager;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.makeramen.roundedimageview.RoundedImageView;
-import com.squareup.leakcanary.RefWatcher;
 import com.squareup.picasso.Picasso;
-import com.starmelon.lovelife.AppConfig;
 import com.starmelon.lovelife.MyApplication;
 import com.starmelon.lovelife.R;
 import com.starmelon.lovelife.data.User;
 import com.starmelon.lovelife.presenter.UserCenterContact;
 import com.starmelon.lovelife.presenter.UserCenterPresenter;
-import com.starmelon.lovelife.util.RecycleBitmap;
-import com.starmelon.lovelife.util.SPutils;
 import com.starmelon.lovelife.util.ToastUtils;
-import com.starmelon.lovelife.util.WinUtils;
 import com.starmelon.lovelife.view.activity.AboutActivity;
 import com.starmelon.lovelife.view.activity.LoginActivity;
 import com.starmelon.lovelife.view.activity.MessageBookActivity;
@@ -50,26 +37,19 @@ public class UserFragment extends BaseFragment<UserCenterContact.View,UserCenter
 	private TextView mTv_nickname;
 
 	//夜间模式
-	private ToggleButton mTogglebtn_daynight;
 	private SwitchView mSwitch_daynight;
 
 	//留言大厅
 	private RelativeLayout mRl_messageBook;
+
 	//关于
 	private RelativeLayout mRl_about;
 
 
 	@Override
-	public void onCreate(@Nullable Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		Log.v("UserFragment","onCreate");
-	}
-
-	@Override
 	protected UserCenterPresenter createPresenter() {
 		return new UserCenterPresenter();
 	}
-
 
 	@Override
 	protected void onCreateView(Bundle savedInstanceState) {
@@ -77,12 +57,12 @@ public class UserFragment extends BaseFragment<UserCenterContact.View,UserCenter
 		setContentView(R.layout.fragment_user);
 		initView();
 
+		mPresenter.showNightMode();
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-
 		if (mPresenter == null) return;
 		mPresenter.showUser();
 
@@ -104,19 +84,16 @@ public class UserFragment extends BaseFragment<UserCenterContact.View,UserCenter
 
 
 		mSwitch_daynight = (SwitchView) findViewById(R.id.togglebtn_daynight);
+		mSwitch_daynight.setColor(getResources().getColor(R.color.purple_blue), getResources().getColor(R.color.smoke_white));
 		mSwitch_daynight.setOnStateChangedListener(new SwitchView.OnStateChangedListener() {
 			@Override
 			public void toggleToOn(SwitchView view) {
-				view.toggleSwitch(true);
-				//AppConfig.getInstance().setNightMode(true);
-				switchNightMode(true);
+				mPresenter.switchNightMode(true);
 			}
 
 			@Override
 			public void toggleToOff(SwitchView view) {
-				view.toggleSwitch(false);
-//				AppConfig.getInstance().setNightMode(false);
-				switchNightMode(false);
+				mPresenter.switchNightMode(false);
 			}
 
 			@Override
@@ -129,12 +106,7 @@ public class UserFragment extends BaseFragment<UserCenterContact.View,UserCenter
 		mRl_messageBook.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				if (MyApplication.getUser() == null){
-					Toast.makeText(getContext(),"请先登录",Toast.LENGTH_SHORT).show();
-					return;
-				}
-				Intent intent = new Intent(getContext(),MessageBookActivity.class);
-				startActivity(intent);
+				mPresenter.showMessageBook();
 			}
 		});
 
@@ -150,28 +122,10 @@ public class UserFragment extends BaseFragment<UserCenterContact.View,UserCenter
 	}
 
 
-
-	/**
-	 * 切换夜间模式
-	 * @param on
-	 */
-	private void switchNightMode(boolean on){
-
-		if (on){
-
-			UiModeManager mUiModeManager = (UiModeManager) getContext().getSystemService(Context.UI_MODE_SERVICE);
-			mUiModeManager.setNightMode(UiModeManager.MODE_NIGHT_YES);
-			SPutils.put(getContext(),"NigthMode",on);
-		}else{
-
-			UiModeManager mUiModeManager = (UiModeManager) getContext().getSystemService(Context.UI_MODE_SERVICE);
-			mUiModeManager.setNightMode(UiModeManager.MODE_NIGHT_NO);
-			SPutils.put(getContext(),"NigthMode",on);
-		}
-
+	@Override
+	public void showNightModeSwitchState(boolean isNight) {
+		mSwitch_daynight.toggleSwitch(isNight);
 	}
-
-
 
 	@Override
 	public void showSignInUi() {
@@ -204,6 +158,17 @@ public class UserFragment extends BaseFragment<UserCenterContact.View,UserCenter
 		Picasso.with(this.getContext()).load(R.drawable.login_head_default).into(mBtn_login);
 		mTv_nickname.setText("立即登录");
 
+	}
+
+	@Override
+	public void showMessageBookActivity() {
+		Intent intent = new Intent(getContext(),MessageBookActivity.class);
+		startActivity(intent);
+	}
+
+	@Override
+	public void showJoinMessageBookFail() {
+		ToastUtils.show(getContext(),"请先登录");
 	}
 
 	@Override

@@ -49,7 +49,7 @@ public class SignInPresenter implements SignInContract.Presenter{
 
     @Override
     public void signOut() {
-        mUserRps.clearUser();
+        mUserRps.signOut();
         mView.signOutSuccess();
     }
 }

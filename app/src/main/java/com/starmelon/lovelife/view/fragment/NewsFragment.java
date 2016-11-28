@@ -48,6 +48,7 @@ public class NewsFragment extends LazyFragment
 
 
         indicatorViewPager = new IndicatorViewPager(indicator, viewPager);
+        indicatorViewPager.setPageOffscreenLimit(5);
         indicatorViewPager.setAdapter(new NewsFragmentViewPagerAdapter(getChildFragmentManager()));
 
         inflate = LayoutInflater.from(getActivity());

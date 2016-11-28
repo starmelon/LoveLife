@@ -17,7 +17,7 @@ public class HotNews implements Serializable{
 	private int rcount;// 评论读数
 	private String fromname;
 	private String fromurl;
-	private String  time;
+	private long time;
 
 	public HotNews() {
 		super();
@@ -121,11 +121,11 @@ public class HotNews implements Serializable{
 		this.fromurl = fromurl;
 	}
 
-	public String getTime() {
+	public long getTime() {
 		return time;
 	}
 
-	public void setTime(String time) {
+	public void setTime(long time) {
 		this.time = time;
 	}
 

@@ -25,7 +25,7 @@ public abstract  class BaseActivity<V,T extends BasePresenter<V>> extends AppCom
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //initAnime();
+        initAnime();
 
         //创建presenter
         mPresenter = createPresenter();
@@ -62,7 +62,7 @@ public abstract  class BaseActivity<V,T extends BasePresenter<V>> extends AppCom
     public void finish() {
         super.finish();
         ActivityManager.finishActivity(this);
-        //overridePendingTransition(activityCloseEnterAnimation, activityCloseExitAnimation);
+        overridePendingTransition(activityCloseEnterAnimation, activityCloseExitAnimation);
     }
 
     protected abstract  T createPresenter();

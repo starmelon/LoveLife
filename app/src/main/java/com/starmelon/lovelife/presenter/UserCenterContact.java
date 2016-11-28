@@ -11,14 +11,20 @@ public class UserCenterContact {
 
     public interface View extends BaseView<Presenter> {
 
+        void showNightModeSwitchState(boolean isNight);
         void showSignInUi();
         void showUserSignIned(User user);
         void showUserSignOuted();
+        void showMessageBookActivity();
+        void showJoinMessageBookFail();
     }
 
     public interface Presenter {
 
+        void showNightMode();
         void showUser();
+        void switchNightMode(boolean isNight);
+        void showMessageBook();
     }
 
 }

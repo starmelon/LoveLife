@@ -127,17 +127,6 @@ public class AppConfig {
         isNightMode = isNight;
     }
 
-    private void setScreenshot() {
-        View v = ActivityManager.currentActivity().getWindow().getDecorView();
-        v.setDrawingCacheEnabled(true);
-        v.buildDrawingCache();
-
-        int statusBarHeight = WinUtils.getStatusHeight(MyApplication.getContext());
-        int contentHeight = WinUtils.getContentHeight(MyApplication.getContext());
-        int screenWidth = WinUtils.getScreenWidth(MyApplication.getContext());
-
-        theLastViewCut = Bitmap.createBitmap(v.getDrawingCache(),0,statusBarHeight,screenWidth,contentHeight,null,false);
-    }
 
 
     /**

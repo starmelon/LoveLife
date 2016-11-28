@@ -64,7 +64,8 @@ public class UserRepository implements UserDataSource {
     }
 
     @Override
-    public void signUp() {
-
+    public void signOut() {
+        clearUser();
+        mUserRemoteDateSource.signOut();
     }
 }

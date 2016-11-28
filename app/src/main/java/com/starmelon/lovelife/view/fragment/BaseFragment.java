@@ -63,7 +63,6 @@ public abstract class BaseFragment<V,T extends BasePresenter<V>> extends Fragmen
     protected abstract  T createPresenter();
 
 
-
     @Override
     public void onDestroy() {
         super.onDestroy();

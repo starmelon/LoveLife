@@ -4,7 +4,7 @@
    
    这是我在GitHub上第一个完整的Android项目，希望通该项目来给自己带来长足的进步，弥补工作上的知识面欠缺，也希望该项目能成为大家所监督和参考的对象，一起在技术的路上共勉。
    
-经过一段时间的开发，目前已完成：
+开发进度描述：
  * 新闻展示（包括上拉加载，下拉刷新）
  * 新闻类别切换（Tab切换）
  * 新闻详细内容展示
@@ -14,19 +14,22 @@
  * 2016.11.22
  * 增加登录退出功能
  * 实现留言大厅
-   
+ * 2016.11.28
+ * 完善页面间的交互流畅度
+ * 项目架构向MVP演进（已完成登录界面，个人中心，新闻详情页）
+
+开发感言：
 因项目完成时间较短，且碍于时间与精力，可能会有适配、未知BUG等未得到解决的问题存在，希望在该文档完善和代码整理之后，你能Fork一个分支，共同完善该项目。
    
 ## 技术应用
 
 #### 数据与接口
-   数据源基于 [天狗云平台](http://www.tngou.net/) 旗下的 [社会新闻API](http://www.tngou.net/doc/top)
+   数据源基于 [Tngou云平台](http://www.tngou.net/) 旗下的 [社会新闻API](http://www.tngou.net/doc/top)
 
 #### 框架使用
 
    * [ViewPagerIndicator](https://github.com/LuckyJayce/ViewPagerIndicator)
    * [MVCHelper](https://github.com/LuckyJayce/MVCHelper)
-   * [Ultra-Pull-To-Refresh](https://github.com/liaohuqiu/android-Ultra-Pull-To-Refresh)
    * [RecyclerViewItemAnimators](https://github.com/gabrielemariotti/RecyclerViewItemAnimators)
    * [Picasso](https://github.com/square/picasso)
    * [OkHttp](https://github.com/square/okhttp)
@@ -34,7 +37,6 @@
    * [GreenDao](https://github.com/greenrobot/greenDAO)
 
 #### 控件使用
-   * [Togglebutton](https://github.com/zcweng/ToggleButton)
    * [Roundedimageview](https://github.com/vinc3m1/RoundedImageView)
    * [recyclerview-swipe](https://github.com/yanzhenjie/SwipeRecyclerView)
 

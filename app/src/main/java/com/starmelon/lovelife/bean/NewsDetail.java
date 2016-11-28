@@ -3,6 +3,7 @@ package com.starmelon.lovelife.bean;
 import java.io.Serializable;
 
 public class NewsDetail implements Serializable{
+	public int id;
 	public String title;// 资讯标题
 	public int topclass;// 一级分类
 	public String img;// 图片

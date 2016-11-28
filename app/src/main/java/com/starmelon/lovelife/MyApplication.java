@@ -34,41 +34,21 @@ import okhttp3.OkHttpClient;
 
 public class MyApplication extends Application {
 
-	public static Bitmap bitmap;
-	public static ImageView cover;
-	public static WindowManager.LayoutParams mNightViewParam;
+
 
 	private static Context context; //定义全局Context
 
-	private static WindowManager mWindowManager;
-
-
-	private static Boolean isNight;
-
-	private static ObjectAnimator oa;
-
 	private static User user;
-
-
-	public static RefWatcher getRefWatcher(Context context) {
-		MyApplication application = (MyApplication) context.getApplicationContext();
-		return application.refWatcher;
-	}
-
-	private RefWatcher refWatcher;
-
 
 	@Override
 	public void onCreate() {
-		// TODO Auto-generated method stub
 		super.onCreate();
-
-		refWatcher = LeakCanary.install(this);
 
 		inti();
 	}
 
 	public void inti(){
+
 		//初始化全局上下文
 		context = getApplicationContext();
 
@@ -102,23 +82,6 @@ public class MyApplication extends Application {
 		ShareSDK.initSDK(this);
 		Log.v("initEnvir","ShareSDK初始化成功");
 
-		//初始化用于切换夜间模式的Cover
-		cover = new ImageView(context);
-		mNightViewParam = new WindowManager.LayoutParams(
-				WindowManager.LayoutParams.TYPE_APPLICATION,
-				WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-				PixelFormat.TRANSPARENT);
-		oa = ObjectAnimator.ofFloat(MyApplication.cover, "alpha", 1f, 0f);
-		oa.setDuration(600);
-
-		//读取夜间模式
-//		if ((Boolean) SPutils.get(getContext(),"NigthMode",false) == false){
-//			UiModeManager mUiModeManager = (UiModeManager) getContext().getSystemService(Context.UI_MODE_SERVICE);
-//			mUiModeManager.setNightMode(UiModeManager.MODE_NIGHT_NO);
-//		}else {
-//			UiModeManager mUiModeManager = (UiModeManager) getContext().getSystemService(Context.UI_MODE_SERVICE);
-//			mUiModeManager.setNightMode(UiModeManager.MODE_NIGHT_YES);
-//		}
 
 		//初始化GreenDao
 		GreenDaoManager.getInstance();
@@ -127,6 +90,9 @@ public class MyApplication extends Application {
 		// 初始化环信SDK
 		initEasemob();
 		Log.v("initEnvir","环信SDK初始化成功");
+
+		//初始化sharesdk
+		ShareSDK.initSDK(this);
 	}
 
 	public static Context getContext(){
