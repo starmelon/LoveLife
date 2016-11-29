@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewOutlineProvider;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -20,9 +19,8 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.starmelon.lovelife.MyApplication;
 import com.starmelon.lovelife.R;
-import com.starmelon.lovelife.bean.NewsDetail;
-import com.starmelon.lovelife.bean.enties.HotNews;
-import com.starmelon.lovelife.db.net.API;
+import com.starmelon.lovelife.data.tngou.NewsDetail;
+import com.starmelon.lovelife.data.tngou.API;
 import com.starmelon.lovelife.presenter.NewsDetailContact;
 import com.starmelon.lovelife.presenter.NewsDetailPresenter;
 import com.starmelon.lovelife.util.TimeUtils;
@@ -33,7 +31,6 @@ import java.util.HashMap;
 
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
-import cn.sharesdk.framework.ShareSDK;
 
 import cn.sharesdk.onekeyshare.OnekeyShare;
 

@@ -12,7 +12,7 @@ buildscript {
 
 greendao {
     schemaVersion 1
-    daoPackage 'com.starmelon.lovelife.db.local.gen'
+    daoPackage 'com.starmelon.lovelife.data.source.local.gen'
     targetGenDir 'src/main/java'
 }
 

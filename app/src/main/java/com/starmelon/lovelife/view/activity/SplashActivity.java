@@ -1,14 +1,11 @@
 package com.starmelon.lovelife.view.activity;
 
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.UiModeManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ObbInfo;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -17,7 +14,7 @@ import com.hyphenate.chat.EMOptions;
 import com.starmelon.lovelife.AppContext;
 import com.starmelon.lovelife.MyApplication;
 import com.starmelon.lovelife.R;
-import com.starmelon.lovelife.db.local.GreenDaoManager;
+import com.starmelon.lovelife.data.source.local.GreenDaoManager;
 import com.starmelon.lovelife.presenter.BasePresenter;
 import com.starmelon.lovelife.util.SPutils;
 import com.zhy.http.okhttp.OkHttpUtils;

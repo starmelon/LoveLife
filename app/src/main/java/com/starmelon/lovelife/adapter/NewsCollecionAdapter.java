@@ -22,8 +22,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.starmelon.lovelife.R;
-import com.starmelon.lovelife.bean.enties.Collection;
-import com.starmelon.lovelife.bean.enties.HotNews;
+import com.starmelon.lovelife.data.Collection;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuAdapter;
 
 import java.sql.Timestamp;

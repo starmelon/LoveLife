@@ -1,8 +1,6 @@
 package com.starmelon.lovelife.presenter;
 
-import com.starmelon.lovelife.bean.NewsDetail;
-import com.starmelon.lovelife.bean.enties.HotNews;
-import com.starmelon.lovelife.data.User;
+import com.starmelon.lovelife.data.tngou.NewsDetail;
 import com.starmelon.lovelife.util.BaseView;
 
 /**

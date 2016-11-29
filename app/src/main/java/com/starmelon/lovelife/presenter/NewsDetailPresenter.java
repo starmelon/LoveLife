@@ -1,12 +1,12 @@
 package com.starmelon.lovelife.presenter;
 
-import com.starmelon.lovelife.bean.NewsDetail;
-import com.starmelon.lovelife.bean.enties.Collection;
-import com.starmelon.lovelife.db.local.CollectionDaoLHelper;
-import com.starmelon.lovelife.db.net.API;
-import com.starmelon.lovelife.db.net.ApiManager;
-import com.starmelon.lovelife.db.net.GenericsCallback;
-import com.starmelon.lovelife.db.net.JsonGenericsSerializator;
+import com.starmelon.lovelife.data.tngou.NewsDetail;
+import com.starmelon.lovelife.data.Collection;
+import com.starmelon.lovelife.data.source.local.CollectionDaoLHelper;
+import com.starmelon.lovelife.data.tngou.API;
+import com.starmelon.lovelife.util.net.ApiManager;
+import com.starmelon.lovelife.util.net.GenericsCallback;
+import com.starmelon.lovelife.util.net.JsonGenericsSerializator;
 
 import okhttp3.Call;
 

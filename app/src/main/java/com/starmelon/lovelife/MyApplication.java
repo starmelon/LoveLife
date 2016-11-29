@@ -1,23 +1,16 @@
 package com.starmelon.lovelife;
 
-import android.animation.ObjectAnimator;
 import android.app.ActivityManager;
 import android.app.Application;
-import android.app.UiModeManager;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.PixelFormat;
+import android.content.Intent;
 import android.util.Log;
-import android.view.WindowManager;
-import android.widget.ImageView;
 
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMOptions;
-import com.squareup.leakcanary.LeakCanary;
-import com.squareup.leakcanary.RefWatcher;
 import com.starmelon.lovelife.data.User;
-import com.starmelon.lovelife.db.local.GreenDaoManager;
-import com.starmelon.lovelife.util.SPutils;
+import com.starmelon.lovelife.data.source.local.GreenDaoManager;
+import com.starmelon.lovelife.view.activity.SplashActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.https.HttpsUtils;
 import com.zhy.http.okhttp.log.LoggerInterceptor;
@@ -32,7 +25,7 @@ import javax.net.ssl.SSLSession;
 import cn.sharesdk.framework.ShareSDK;
 import okhttp3.OkHttpClient;
 
-public class MyApplication extends Application {
+public class MyApplication extends Application implements Thread.UncaughtExceptionHandler{
 
 
 
@@ -48,6 +41,9 @@ public class MyApplication extends Application {
 	}
 
 	public void inti(){
+
+		//设置Thread Exception Handler
+		Thread.setDefaultUncaughtExceptionHandler(this);
 
 		//初始化全局上下文
 		context = getApplicationContext();
@@ -142,6 +138,8 @@ public class MyApplication extends Application {
 		isInit = true;
 	}
 
+
+
 	/**
 	 * 环信SDK初始化的一些配置
 	 * 关于 EMOptions 可以参考官方的 API 文档
@@ -206,5 +204,17 @@ public class MyApplication extends Application {
 		return null;
 	}
 
+
+
 	//endregion
+
+	@Override
+	public void uncaughtException(Thread thread, Throwable throwable) {
+		System.out.println("uncaughtException");
+		System.exit(0);
+		Intent intent = new Intent(this, SplashActivity.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+				Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(intent);
+	}
 }

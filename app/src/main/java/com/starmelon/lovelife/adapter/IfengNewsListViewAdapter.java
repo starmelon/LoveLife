@@ -12,28 +12,26 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.starmelon.lovelife.MyApplication;
 import com.starmelon.lovelife.R;
-import com.starmelon.lovelife.data.tngou.HotNews;
-import com.starmelon.lovelife.data.tngou.API;
-import com.starmelon.lovelife.util.TimeUtils;
+import com.starmelon.lovelife.data.ifeng.news.Item;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class NewsListViewAdapter extends RecycleViewAdapterWithIData<NewsListViewAdapter.MyViewHolder,List<HotNews>> {
+public class IfengNewsListViewAdapter extends RecycleViewAdapterWithIData<IfengNewsListViewAdapter.MyViewHolder,List<Item>> {
 
 
 	private LayoutInflater inflater;
-	public List<HotNews> hotNewses = new ArrayList<>();
+	public List<Item> hotNewses = new ArrayList<>();
 
 
-	public NewsListViewAdapter(Context context) {
+	public IfengNewsListViewAdapter(Context context) {
 		super();
 		inflater = LayoutInflater.from(context);
 	}
 
 	@Override
-	public NewsListViewAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+	public IfengNewsListViewAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
 		MyViewHolder holder = null;
 		switch (viewType){
@@ -66,16 +64,16 @@ public class NewsListViewAdapter extends RecycleViewAdapterWithIData<NewsListVie
 		final int pos = getRealPosition(holder);
 
 
-		if (hotNewses.get(pos).getImg().equals(API.API_IMAGE + "/top/default.jpg")){
-			Picasso.with(MyApplication.getContext()).load(R.drawable.img_default).into(holder.img);
-		}else
+//		if (hotNewses.get(pos).getImg().equals(API.API_IMAGE + "/top/default.jpg")){
+//			Picasso.with(MyApplication.getContext()).load(R.drawable.img_default).into(holder.img);
+//		}else
 		{
-			Picasso.with(MyApplication.getContext()).load(hotNewses.get(pos).getImg()).into(holder.img);
+			Picasso.with(MyApplication.getContext()).load(hotNewses.get(pos).getThumbnail()).into(holder.img);
 		}
 
 		holder.title.setText(hotNewses.get(pos).getTitle());
-		holder.time.setText(TimeUtils.long2String(hotNewses.get(pos).getTime()));
-		holder.count.setText(hotNewses.get(pos).getCount()+"");
+		holder.time.setText(hotNewses.get(pos).getUpdateTime());
+		holder.count.setText(hotNewses.get(pos).getComments());
 
 		//region 如果设置了回调，则设置点击事件
 		if (mOnItemClickLitener != null)
@@ -132,7 +130,7 @@ public class NewsListViewAdapter extends RecycleViewAdapterWithIData<NewsListVie
 
 
 	@Override
-	public void notifyDataChanged(List<HotNews> data, boolean isRefresh) {
+	public void notifyDataChanged(List<Item> data, boolean isRefresh) {
 		if (isRefresh) {
 			hotNewses.clear();
 		}
@@ -142,7 +140,7 @@ public class NewsListViewAdapter extends RecycleViewAdapterWithIData<NewsListVie
 	}
 
 	@Override
-	public List<HotNews> getData() {
+	public List<Item> getData() {
 		return hotNewses;
 	}
 
@@ -182,8 +180,8 @@ public class NewsListViewAdapter extends RecycleViewAdapterWithIData<NewsListVie
 
 	public interface OnItemClickListener
 	{
-		void onItemClick(View view, int position,HotNews hotNews);
-		void onItemLongClick(View view , int position);
+		void onItemClick(View view, int position, Item hotNews);
+		void onItemLongClick(View view, int position);
 	}
 
 	private OnItemClickListener mOnItemClickLitener;

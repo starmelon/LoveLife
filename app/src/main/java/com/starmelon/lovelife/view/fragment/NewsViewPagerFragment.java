@@ -5,21 +5,15 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.shizhefei.fragment.LazyFragment;
-import com.shizhefei.mvc.ILoadViewFactory;
 import com.shizhefei.mvc.MVCHelper;
 import com.shizhefei.mvc.MVCSwipeRefreshHelper;
 import com.shizhefei.view.indicator.BannerComponent;
@@ -29,9 +23,10 @@ import com.shizhefei.view.indicator.slidebar.ScrollBar;
 import com.starmelon.lovelife.R;
 import com.starmelon.lovelife.adapter.AlphaAnimatorAdapterWithIData;
 import com.starmelon.lovelife.adapter.BannerAdapter;
-import com.starmelon.lovelife.adapter.NewsListViewAdapter;
-import com.starmelon.lovelife.bean.enties.HotNews;
-import com.starmelon.lovelife.db.net.News_DataSource;
+import com.starmelon.lovelife.adapter.IfengNewsListViewAdapter;
+import com.starmelon.lovelife.data.tngou.HotNews;
+import com.starmelon.lovelife.data.ifeng.news.Item;
+import com.starmelon.lovelife.data.ifeng.news.IfengNews_DataSource;
 import com.starmelon.lovelife.view.activity.NewsDetailActivity;
 import com.starmelon.lovelife.view.custom.DividerItemDecoration;
 
@@ -91,18 +86,23 @@ public class NewsViewPagerFragment extends LazyFragment {
         bannerComponent.setAutoPlayTime(2500);
 //
 //
-        MVCHelper<List<HotNews>> mvcHelper = new MVCSwipeRefreshHelper<List<HotNews>>(mSwipeRefreshLayout);
 
-//        mvcHelper = new MVCUltraHelper<List<HotNews>>(mPtrFrameLayout);
+        //MVCHelper<List<HotNews>> mvcHelper = new MVCSwipeRefreshHelper<List<HotNews>>(mSwipeRefreshLayout);
+        MVCHelper<List<Item>> mvcHelper = new MVCSwipeRefreshHelper<List<Item>>(mSwipeRefreshLayout);
 //
         // 设置数据源
-        mvcHelper.setDataSource(new News_DataSource(position));
+        //mvcHelper.setDataSource(new News_DataSource(position));
+
+        //设置凤凰数据源
+        mvcHelper.setDataSource(new IfengNews_DataSource());
+
 //
-        NewsListViewAdapter newsListViewAdapter = new NewsListViewAdapter(this.getContext());
+        //NewsListViewAdapter newsListViewAdapter = new NewsListViewAdapter(this.getContext());
+        IfengNewsListViewAdapter newsListViewAdapter = new IfengNewsListViewAdapter(this.getContext());
         newsListViewAdapter.setHeaderView(view);
-        newsListViewAdapter.setOnItemClickLitener(new NewsListViewAdapter.OnItemClickListener() {
+        newsListViewAdapter.setOnItemClickLitener(new IfengNewsListViewAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(View view, int position,HotNews hotNews) {
+            public void onItemClick(View view, int position,Item hotNews) {
 
                 //Toast.makeText(getContext(), "你按到了" + position, Toast.LENGTH_SHORT).show();
 
@@ -112,14 +112,15 @@ public class NewsViewPagerFragment extends LazyFragment {
 
                 Intent intent = new Intent(getContext(),NewsDetailActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putInt("hotNewsId", hotNews.getId());
-                //bundle.putSerializable("hotNewsId", hotNews.getId());
+                //bundle.putInt("hotNewsId", hotNews.getId());
+                bundle.putString("hotNewsId", hotNews.getId());
                 intent.putExtras(bundle);
                 startActivity(intent);
 
                 //intent.putExtra("id", hotNews.getId());
                 //intent.putExtra("news",hotNews.s);
 
+                //使用元素共享
 //                View img =  view.findViewById(R.id.img_news);
 //                View time =  view.findViewById(R.id.tv_time);
 //
