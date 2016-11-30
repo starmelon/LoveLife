@@ -25,7 +25,7 @@ public class CollectionDao extends AbstractDao<Collection, Long> {
      */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Newsid = new Property(1, int.class, "newsid", false, "NEWSID");
+        public final static Property Newsid = new Property(1, String.class, "newsid", false, "NEWSID");
         public final static Property Title = new Property(2, String.class, "title", false, "TITLE");
         public final static Property Time = new Property(3, long.class, "time", false, "TIME");
     }
@@ -44,7 +44,7 @@ public class CollectionDao extends AbstractDao<Collection, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"COLLECTION\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
-                "\"NEWSID\" INTEGER NOT NULL ," + // 1: newsid
+                "\"NEWSID\" TEXT UNIQUE ," + // 1: newsid
                 "\"TITLE\" TEXT," + // 2: title
                 "\"TIME\" INTEGER NOT NULL );"); // 3: time
     }
@@ -63,7 +63,11 @@ public class CollectionDao extends AbstractDao<Collection, Long> {
         if (id != null) {
             stmt.bindLong(1, id);
         }
-        stmt.bindLong(2, entity.getNewsid());
+ 
+        String newsid = entity.getNewsid();
+        if (newsid != null) {
+            stmt.bindString(2, newsid);
+        }
  
         String title = entity.getTitle();
         if (title != null) {
@@ -80,7 +84,11 @@ public class CollectionDao extends AbstractDao<Collection, Long> {
         if (id != null) {
             stmt.bindLong(1, id);
         }
-        stmt.bindLong(2, entity.getNewsid());
+ 
+        String newsid = entity.getNewsid();
+        if (newsid != null) {
+            stmt.bindString(2, newsid);
+        }
  
         String title = entity.getTitle();
         if (title != null) {
@@ -98,7 +106,7 @@ public class CollectionDao extends AbstractDao<Collection, Long> {
     public Collection readEntity(Cursor cursor, int offset) {
         Collection entity = new Collection( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.getInt(offset + 1), // newsid
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // newsid
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // title
             cursor.getLong(offset + 3) // time
         );
@@ -108,7 +116,7 @@ public class CollectionDao extends AbstractDao<Collection, Long> {
     @Override
     public void readEntity(Cursor cursor, Collection entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setNewsid(cursor.getInt(offset + 1));
+        entity.setNewsid(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setTitle(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setTime(cursor.getLong(offset + 3));
      }

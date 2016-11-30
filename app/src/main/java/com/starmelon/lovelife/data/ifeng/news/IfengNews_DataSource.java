@@ -21,23 +21,24 @@ import okhttp3.Response;
  * 这是没有封装OKHttp请求的演示代码
  */
 public class IfengNews_DataSource implements IAsyncDataSource<List<Item>> {
-    private int classify;
+    private String classify;
     private int mPage = 1;
     private int mMaxPage = 0;
 
-    public IfengNews_DataSource()
+    public IfengNews_DataSource(String mNewsClass)
     {
         super();
+        classify = mNewsClass;
     }
 
     @Override
     public RequestHandle refresh(ResponseSender<List<Item>> sender) throws Exception {
-        return loadBooks(sender, 1);
+        return loadNewses(sender, 1);
     }
 
     @Override
     public RequestHandle loadMore(ResponseSender<List<Item>> sender) throws Exception {
-        return loadBooks(sender, mPage + 1);
+        return loadNewses(sender, mPage + 1);
     }
 
     @Override
@@ -45,13 +46,18 @@ public class IfengNews_DataSource implements IAsyncDataSource<List<Item>> {
         return mPage < mMaxPage;
     }
 
-    private RequestHandle loadBooks(final ResponseSender<List<Item>> sender, final int page) throws Exception {
+    private RequestHandle loadNewses(final ResponseSender<List<Item>> sender, final int page) throws Exception {
 
 
         GetMethod method = new GetMethod(IfengAPI.NEWS_LIST);
 
-        method.addParam("id", "SYLB10")
-                .addParam("page",page);
+        method.addParam("id", classify)
+                .addParam("action","default")
+                .addParam("page",page)
+                .addParam("gv","5.3.2")
+                .addParam("av","5.3.2")
+                .addParam("proid","ifengnews");
+
 
         method.executeAsync(sender, new ResponseParser<List<Item>>() {
             @Override
@@ -72,7 +78,15 @@ public class IfengNews_DataSource implements IAsyncDataSource<List<Item>> {
                     if(news == null){
                         return null;
                     }
-                    List<Item> items = new ArrayList<Item>(news.getItem());
+
+                    List<Item> items = new ArrayList<>();
+                    for (Item item : news.getItem()){
+                        if (item.getType().equals("doc")){
+                            items.add(item);
+                        }
+                    }
+
+                    //List<Item> items = new ArrayList<Item>(news.getItem());
 
                     //items.addAll(news.);
 //                    for (HotNews hotNews : hotNewses){

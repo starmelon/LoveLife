@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
@@ -11,10 +12,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.starmelon.lovelife.R;
-import com.starmelon.lovelife.adapter.NewsCollecionAdapter;
+import com.starmelon.lovelife.adapter.NewsCollectionAdapter;
 import com.starmelon.lovelife.data.Collection;
-import com.starmelon.lovelife.data.source.local.CollectionDaoLHelper;
-import com.starmelon.lovelife.presenter.BasePresenter;
+import com.starmelon.lovelife.presenter.CollectionContact;
+import com.starmelon.lovelife.presenter.CollectionPresenter;
+import com.starmelon.lovelife.util.ToastUtils;
 import com.starmelon.lovelife.view.activity.NewsDetailActivity;
 import com.starmelon.lovelife.view.custom.DividerItemDecoration;
 import com.yanzhenjie.recyclerview.swipe.Closeable;
@@ -28,26 +30,31 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class CollectionFragment extends BaseFragment
+public class CollectionFragment extends BaseFragment<CollectionContact.View,CollectionPresenter> implements CollectionContact.View
 {
-	//inflater.inflate(R.layout.fragment_collection, container, false);
+
 
 	private Activity mContext;
 
-	private NewsCollecionAdapter mNewCollecionAdapter;
-
-	private List<Collection> mCollecions;
+	private NewsCollectionAdapter mNewsCollectionAdapter;
 
 	private SwipeMenuRecyclerView mSwipeMenuRecyclerView;
 
+	private List<Collection> mCollections;
 
-	private TextView mTxtEmty;
+	private TextView mTxtEmpty;
 
 	@Override
-	protected BasePresenter createPresenter() {
-		return null;
+	protected CollectionPresenter createPresenter() {
+		return new CollectionPresenter();
 	}
 
+
+	@Override
+	public void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		mNewsCollectionAdapter = new NewsCollectionAdapter(new ArrayList<Collection>(0),mItemListener);
+	}
 
 	@Override
 	protected void onCreateView(Bundle savedInstanceState) {
@@ -56,7 +63,7 @@ public class CollectionFragment extends BaseFragment
 
 		mContext = getActivity();
 
-		mTxtEmty = (TextView) findViewById(R.id.tv_empty);
+		mTxtEmpty = (TextView) findViewById(R.id.tv_empty);
 
 
 		mSwipeMenuRecyclerView = (SwipeMenuRecyclerView) findViewById(R.id.recycler_view);
@@ -71,20 +78,27 @@ public class CollectionFragment extends BaseFragment
 		// 设置菜单Item点击监听。
 		mSwipeMenuRecyclerView.setSwipeMenuItemClickListener(menuItemClickListener);
 
-		mCollecions = new ArrayList<>();
+		mCollections = new ArrayList<>();
 
-		mNewCollecionAdapter = new NewsCollecionAdapter(mCollecions);
-		mNewCollecionAdapter.setOnItemClickListener(onItemClickListener);
-		mSwipeMenuRecyclerView.setAdapter(mNewCollecionAdapter);
+		//mNewsCollectionAdapter = new NewsCollectionAdapter(mCollections);
+		//mNewsCollectionAdapter.setOnItemClickListener(onItemClickListener);
+		mSwipeMenuRecyclerView.setAdapter(mNewsCollectionAdapter);
 
 		initData();
 
 	}
 
+	@Override
+	public void onResume() {
+		super.onResume();
+		refreshCollection();
+	}
+
 	private void initData() {
 		long time = new Date().getTime();
-		List<Collection> collections = new CollectionDaoLHelper().getCollectionByTime(time,10);
-		mCollecions.addAll(collections);
+		refreshCollection();
+//		List<Collection> collections = new CollectionDaoLHelper().getCollectionByTime(time,10);
+//		mCollections.addAll(collections);
 
 	}
 
@@ -116,20 +130,6 @@ public class CollectionFragment extends BaseFragment
 		}
 	};
 
-	private NewsCollecionAdapter.OnItemClickListener onItemClickListener = new NewsCollecionAdapter.OnItemClickListener() {
-		@Override
-		public void onItemClick(int position) {
-
-			Intent intent = new Intent(getContext(),NewsDetailActivity.class);
-			Bundle bundle = new Bundle();
-			bundle.putInt("hotNewsId", mCollecions.get(position).getNewsid());
-			intent.putExtras(bundle);
-			startActivity(intent);
-
-			//Toast.makeText(mContext, "我是第" + position + "条。", Toast.LENGTH_SHORT).show();
-		}
-	};
-
 	/**
 	 * 侧滑菜单点击监听。
 	 */
@@ -149,15 +149,12 @@ public class CollectionFragment extends BaseFragment
 			if (menuPosition == 0) {// 删除按钮被点击。
 				//mStrings.remove(adapterPosition);
 
-				new CollectionDaoLHelper().deleteCollecion(mCollecions.get(adapterPosition).getNewsid());
-				mCollecions.remove(adapterPosition);
-				mNewCollecionAdapter.notifyItemRemoved(adapterPosition);
+				mNewsCollectionAdapter.notifyItemRemoved(adapterPosition);
+				String newid = mCollections.get(adapterPosition).getNewsid();
+				//mCollections.remove(adapterPosition);
+				mPresenter.deleteCollection(newid);
 
-				if (mCollecions.size()>0){
-					mTxtEmty.setVisibility(View.GONE);
-				}else {
-					mTxtEmty.setVisibility(View.VISIBLE);
-				}
+
 			}
 		}
 	};
@@ -168,31 +165,67 @@ public class CollectionFragment extends BaseFragment
 		super.onHiddenChanged(hidden);
 
 		if (!hidden){
-			long time = new Date().getTime();
-			if (mCollecions == null){
-				return;
-			}
-			mCollecions.clear();
-			List<Collection> collections = new CollectionDaoLHelper().getCollectionByTime(time,10);
-			mCollecions.addAll(collections);
-			mNewCollecionAdapter.notifyDataSetChanged();
-			if (collections.size()>0){
-				mTxtEmty.setVisibility(View.GONE);
-			}else {
-				mTxtEmty.setVisibility(View.VISIBLE);
-			}
+			mPresenter.loadCollections();
+			//refreshCollection();
 		}
 
 	}
 
+	@Override
+	public void showDeleteResult(String msg) {
+		ToastUtils.show(getActivity(),msg);
+	}
 
+	@Override
+	public void showEmpty() {
+		mCollections.clear();
+		mSwipeMenuRecyclerView.setVisibility(View.GONE);
+		mTxtEmpty.setVisibility(View.VISIBLE);
+	}
 
-//	@Override
-//	public void setUserVisibleHint(boolean isVisibleToUser) {
-//		super.setUserVisibleHint(isVisibleToUser);
-//		if (isVisibleToUser){
-//			//当收藏夹可见时，刷新收藏夹
-//
-//		}
-//	}
+	@Override
+	public void showCollections(List<Collection> collections) {
+
+		mSwipeMenuRecyclerView.setVisibility(View.VISIBLE);
+		mTxtEmpty.setVisibility(View.GONE);
+		mNewsCollectionAdapter.replaceData(collections);
+		mCollections = collections;
+
+	}
+
+	@Override
+	public void refreshCollection(){
+
+		mPresenter.loadCollections();
+
+	}
+
+	@Override
+	public void showNewsDetailUi(String newsid) {
+		Intent intent = new Intent(getContext(),NewsDetailActivity.class);
+		Bundle bundle = new Bundle();
+		bundle.putString("hotNewsId", newsid);
+		intent.putExtras(bundle);
+		startActivity(intent);
+	}
+
+	@Override
+	public void setPresenter(CollectionContact.Presenter presenter) {
+
+	}
+
+	/**
+	 * Listener for clicks on tasks in the ListView.
+	 */
+	CollectionItemListener mItemListener = new CollectionItemListener() {
+		@Override
+		public void onCollectionClick(Collection clickedCollection) {
+			mPresenter.openNewsDetail(clickedCollection);
+		}
+
+	};
+
+	public interface CollectionItemListener{
+		void onCollectionClick(Collection collection);
+	}
 }

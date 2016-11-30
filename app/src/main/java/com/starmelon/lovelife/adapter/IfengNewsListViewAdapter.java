@@ -2,6 +2,7 @@ package com.starmelon.lovelife.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,13 +68,17 @@ public class IfengNewsListViewAdapter extends RecycleViewAdapterWithIData<IfengN
 //		if (hotNewses.get(pos).getImg().equals(API.API_IMAGE + "/top/default.jpg")){
 //			Picasso.with(MyApplication.getContext()).load(R.drawable.img_default).into(holder.img);
 //		}else
+
+		Item item = hotNewses.get(pos);
+
+		if (!TextUtils.isEmpty(item.getThumbnail()))
 		{
-			Picasso.with(MyApplication.getContext()).load(hotNewses.get(pos).getThumbnail()).into(holder.img);
+			Picasso.with(MyApplication.getContext()).load(item.getThumbnail()).into(holder.img);
 		}
 
-		holder.title.setText(hotNewses.get(pos).getTitle());
-		holder.time.setText(hotNewses.get(pos).getUpdateTime());
-		holder.count.setText(hotNewses.get(pos).getComments());
+		holder.title.setText(item.getTitle());
+		holder.time.setText(item.getUpdateTime());
+		holder.count.setText(item.getComments());
 
 		//region 如果设置了回调，则设置点击事件
 		if (mOnItemClickLitener != null)

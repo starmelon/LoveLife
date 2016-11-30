@@ -41,6 +41,7 @@ public class NewsViewPagerFragment extends LazyFragment {
     public static final String INTENT_INT_POSITION = "intent_int_position";
     private String tabName;
     private int position;
+    private String mNewsClass;
     private TextView textView;
     private ProgressBar progressBar;
 
@@ -58,7 +59,10 @@ public class NewsViewPagerFragment extends LazyFragment {
     protected void onCreateViewLazy(Bundle savedInstanceState) {
         super.onCreateViewLazy(savedInstanceState);
 //        tabName = getArguments().getString(INTENT_STRING_TABNAME);
-        position = getArguments().getInt(INTENT_INT_POSITION);
+
+        //position = getArguments().getInt(INTENT_INT_POSITION);
+        mNewsClass = getArguments().getString(INTENT_INT_POSITION);
+
         setContentView(R.layout.fragment_view_pager);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refreshLayout);
@@ -94,7 +98,7 @@ public class NewsViewPagerFragment extends LazyFragment {
         //mvcHelper.setDataSource(new News_DataSource(position));
 
         //设置凤凰数据源
-        mvcHelper.setDataSource(new IfengNews_DataSource());
+        mvcHelper.setDataSource(new IfengNews_DataSource(mNewsClass));
 
 //
         //NewsListViewAdapter newsListViewAdapter = new NewsListViewAdapter(this.getContext());

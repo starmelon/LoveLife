@@ -1,10 +1,16 @@
 package com.starmelon.lovelife.view.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Outline;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.renderscript.Sampler;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewOutlineProvider;
@@ -16,18 +22,24 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import com.starmelon.lovelife.MyApplication;
 import com.starmelon.lovelife.R;
-import com.starmelon.lovelife.data.tngou.NewsDetail;
-import com.starmelon.lovelife.data.tngou.API;
+import com.starmelon.lovelife.data.ifeng.newsdetail.Img;
+import com.starmelon.lovelife.data.ifeng.newsdetail.NewsDetail;
 import com.starmelon.lovelife.presenter.NewsDetailContact;
 import com.starmelon.lovelife.presenter.NewsDetailPresenter;
-import com.starmelon.lovelife.util.TimeUtils;
+import com.starmelon.lovelife.util.PicassoImageGetter;
 import com.starmelon.lovelife.util.ToastUtils;
 
 
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
@@ -83,7 +95,7 @@ public class NewsDetailActivity extends BaseActivity<NewsDetailContact.View,News
 		mDots.start();
 
 		Intent intent = getIntent();
-		int hotNewsId = intent.getIntExtra("hotNewsId",-1);
+		String hotNewsId = intent.getStringExtra("hotNewsId");
 		//HotNews hotnews = (HotNews) intent.getSerializableExtra("hotNewsId");
 
 
@@ -168,31 +180,38 @@ public class NewsDetailActivity extends BaseActivity<NewsDetailContact.View,News
 	}
 
 	@Override
-	public void loadNewsDetailSucceed(NewsDetail newsDetail) {
+	public void loadNewsDetailSucceed(NewsDetail newsDetail)  {
+
+		mNewsDetail = newsDetail;
+
+		mLoading.setVisibility(View.GONE);
+								mFailed.setVisibility(View.GONE);
+
+								mContent.setVisibility(View.VISIBLE);
+								ll_tab.setVisibility(View.VISIBLE);
+
+//		mTv_title.setText(newsDetail.title);
+//		mTv_time.setText(TimeUtils.long2String(newsDetail.time));
+//		mTv_provenance.setText(newsDetail.fromname);
+//		mTv_count.setText(newsDetail.count + "");
+
+		mTv_title.setText(newsDetail.getBody().getTitle());
+		mTv_time.setText(newsDetail.getBody().getUpdateTime());
+		mTv_provenance.setText(newsDetail.getBody().getSource());
+		mTv_count.setText("0");
 
 
-		if (newsDetail.img.equals(API.API_IMAGE + "/top/default.jpg")){
-			mImg.setVisibility(View.GONE);
-		}else
-		{
-			Picasso.with(MyApplication.getContext()).load(newsDetail.img).into(mImg);
+
+		if (newsDetail.getBody().getImg().size() > 0){
+			Log.v("clc","开始加载图片");
+			PicassoImageGetter imageGetter = new PicassoImageGetter(mTv_content,getResources(),Picasso.with(getApplication()));
+			mTv_content.setText(Html.fromHtml(mNewsDetail.getBody().getText(),imageGetter,null));
+
 		}
 
-		mTv_title.setText(newsDetail.title);
-		mTv_time.setText(TimeUtils.long2String(newsDetail.time));
-		mTv_provenance.setText(newsDetail.fromname);
-		mTv_count.setText(newsDetail.count + "");
 
-		String content = Html.fromHtml(newsDetail.message).toString();
-		mTv_content.setText(content.replace((char)65532,' '));
-
-		mDots.stop();
-		mLoading.setVisibility(View.GONE);
-		mFailed.setVisibility(View.GONE);
-
-		mContent.setVisibility(View.VISIBLE);
-		ll_tab.setVisibility(View.VISIBLE);
 	}
+
 
 	@Override
 	public void loadNewsDetailFailed(String error) {
@@ -242,7 +261,7 @@ public class NewsDetailActivity extends BaseActivity<NewsDetailContact.View,News
 		// title标题，印象笔记、邮箱、信息、微信、人人网和QQ空间使用
 		oks.setTitle(getString(R.string.share));
 		// titleUrl是标题的网络链接，仅在人人网和QQ空间使用
-		oks.setTitleUrl(newsDetail.fromurl);
+		oks.setTitleUrl(newsDetail.getBody().getShareurl());
 		// text是分享文本，所有平台都需要这个字段
 		oks.setText("我是分享文本");
 		// imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
@@ -282,4 +301,6 @@ public class NewsDetailActivity extends BaseActivity<NewsDetailContact.View,News
 	public void setPresenter(NewsDetailContact.Presenter presenter) {
 
 	}
+
+
 }

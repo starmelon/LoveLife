@@ -7,11 +7,9 @@ import com.google.gson.annotations.SerializedName;
 
 public class NewsDetail {
 
-    @SerializedName("meta")
-    @Expose
+
     private Meta meta;
-    @SerializedName("body")
-    @Expose
+
     private Body body;
 
     /**

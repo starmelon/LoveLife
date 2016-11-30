@@ -3,6 +3,7 @@ package com.starmelon.lovelife.data;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Unique;
 
 import java.sql.Timestamp;
 
@@ -15,12 +16,12 @@ public class Collection {
 
     @Id
     private Long id;
-    private int  newsid;
+    @Unique
+    private String  newsid;
     private String title;//
     private long time;
-    //private String time;//收藏的时间
-    @Generated(hash = 656158102)
-    public Collection(Long id, int newsid, String title, long time) {
+    @Generated(hash = 942935742)
+    public Collection(Long id, String newsid, String title, long time) {
         this.id = id;
         this.newsid = newsid;
         this.title = title;
@@ -35,10 +36,10 @@ public class Collection {
     public void setId(Long id) {
         this.id = id;
     }
-    public int getNewsid() {
+    public String getNewsid() {
         return this.newsid;
     }
-    public void setNewsid(int newsid) {
+    public void setNewsid(String newsid) {
         this.newsid = newsid;
     }
     public String getTitle() {

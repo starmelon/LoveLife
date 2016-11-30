@@ -7,17 +7,17 @@ public class Size {
 
     @SerializedName("width")
     @Expose
-    private String width;
+    private int width;
     @SerializedName("height")
     @Expose
-    private String height;
+    private int height;
 
     /**
      *
      * @return
      * The width
      */
-    public String getWidth() {
+    public int getWidth() {
         return width;
     }
 
@@ -26,7 +26,7 @@ public class Size {
      * @param width
      * The width
      */
-    public void setWidth(String width) {
+    public void setWidth(int width) {
         this.width = width;
     }
 
@@ -35,7 +35,7 @@ public class Size {
      * @return
      * The height
      */
-    public String getHeight() {
+    public int getHeight() {
         return height;
     }
 
@@ -44,7 +44,7 @@ public class Size {
      * @param height
      * The height
      */
-    public void setHeight(String height) {
+    public void setHeight(int height) {
         this.height = height;
     }
 

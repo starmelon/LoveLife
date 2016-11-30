@@ -19,7 +19,8 @@ public class NewsFragmentViewPagerAdapter extends IndicatorViewPager.IndicatorFr
 
 
     private LayoutInflater inflater;
-    private String[] tabNames = {"民生", "娱乐", "财经", "体育", "教育" ,"社会"};
+    private String[] tabNames = {"头条", "科技", "娱乐", "历史", "教育" ,"社会"};
+    private String[] tabclass = {"SYLB10","KJ123","FOCUSSH133","FOCUSLS153","FOCUSLS153","FOCUSLS153"};
 
     public NewsFragmentViewPagerAdapter(FragmentManager fragmentManager) {
         super(fragmentManager);
@@ -52,7 +53,8 @@ public class NewsFragmentViewPagerAdapter extends IndicatorViewPager.IndicatorFr
         NewsViewPagerFragment mainFragment = new NewsViewPagerFragment();
         Bundle bundle = new Bundle();
         bundle.putString(NewsViewPagerFragment.INTENT_STRING_TABNAME, tabNames[position]);
-        bundle.putInt(NewsViewPagerFragment.INTENT_INT_POSITION, position);
+        bundle.putString(NewsViewPagerFragment.INTENT_INT_POSITION,tabclass[position]);
+        //bundle.putInt(NewsViewPagerFragment.INTENT_INT_POSITION, position);
         mainFragment.setArguments(bundle);
         return mainFragment;
 

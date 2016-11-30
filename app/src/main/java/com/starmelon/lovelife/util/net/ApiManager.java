@@ -82,6 +82,13 @@ public class ApiManager {
 	}
 
 
+	public static void getIfengNewsDetailById(GenericsCallback json2dataCallBack,String id){
+		OkHttpUtils
+				.get()
+				.url(id)
+				.build()
+				.execute(json2dataCallBack);
+	}
 
 
 	

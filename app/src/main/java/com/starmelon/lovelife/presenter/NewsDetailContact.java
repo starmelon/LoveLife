@@ -1,7 +1,10 @@
 package com.starmelon.lovelife.presenter;
 
-import com.starmelon.lovelife.data.tngou.NewsDetail;
+
+import com.starmelon.lovelife.data.ifeng.newsdetail.NewsDetail;
 import com.starmelon.lovelife.util.BaseView;
+
+import java.io.IOException;
 
 /**
  * Created by starmelon on 2016/11/24 0024.
@@ -23,7 +26,7 @@ public class NewsDetailContact {
 
     public interface Presenter {
 
-        void loadNewsDetail(int id);
+        void loadNewsDetail(String id);
         void reloadNewsDetail();
         void collectNews();
         void showCollectState();
